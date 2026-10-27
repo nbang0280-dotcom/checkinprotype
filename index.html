@@ -1084,11 +1084,41 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
           </div>
         </div>
 
-        <!-- GUESTS TAB -->
-        <div id="mobTabGuests" class="hidden space-y-2">
-          <div class="text-xs font-bold text-slate-700 px-1 uppercase tracking-wide text-[11px]">Khách đang lưu trú</div>
-          <div id="mobGuestsList" class="space-y-2">
-            <!-- Dynamically Rendered -->
+        <!-- TAB 2: LỊCH SỬ LƯU TRÚ (STAY HISTORY) -->
+        <div id="mobTabGuests" class="hidden space-y-2.5">
+          <!-- Filter & Search Sub-header -->
+          <div class="bg-white p-3 rounded-2xl border border-slate-200/90 shadow-xs space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5 font-bold text-xs text-slate-800">
+                <i class="fa-solid fa-clock-rotate-left text-blue-600"></i>
+                <span>Lịch sử lưu trú</span>
+              </div>
+              <span id="mobHistoryTotalBadge" class="text-[10px] font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-200">16 lượt</span>
+            </div>
+
+            <!-- Search box -->
+            <div class="relative">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+              <input type="text" id="mobHistorySearchInput" oninput="handleMobileHistorySearch(this.value)" placeholder="Tìm tên khách, CCCD, số phòng..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
+            </div>
+
+            <!-- Filter Controls: Status Pills & Room select -->
+            <div class="flex items-center justify-between gap-1.5 text-xs pt-0.5">
+              <div class="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-[11px]">
+                <button onclick="filterMobileHistoryStatus('all')" id="mobHistStatusAll" class="mob-hist-status-btn px-2 py-1 rounded-lg font-bold bg-white text-slate-800 shadow-xs">Tất cả</button>
+                <button onclick="filterMobileHistoryStatus('staying')" id="mobHistStatusStaying" class="mob-hist-status-btn px-2 py-1 rounded-lg font-semibold text-slate-500 hover:text-amber-700">Đang ở</button>
+                <button onclick="filterMobileHistoryStatus('checked_out')" id="mobHistStatusOut" class="mob-hist-status-btn px-2 py-1 rounded-lg font-semibold text-slate-500 hover:text-emerald-700">Đã trả</button>
+              </div>
+
+              <select id="mobFilterHistoryRoom" onchange="handleMobileHistoryRoomFilter(this.value)" class="text-[11px] bg-slate-50 border border-slate-200 rounded-xl px-2 py-1 text-slate-700 focus:outline-none focus:border-blue-500 max-w-[120px]">
+                <option value="">Tất cả phòng</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- History Records List -->
+          <div id="mobGuestsList" class="space-y-2 pb-2">
+            <!-- Dynamically Rendered by renderMobileHistory() -->
           </div>
         </div>
 
@@ -1251,8 +1281,8 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
           <span>Phòng</span>
         </button>
         <button onclick="mobileSwitchTab('guests')" id="mobNavGuests" class="flex flex-col items-center gap-1 text-slate-400 text-[10px] w-12 py-1">
-          <i class="fa-solid fa-users text-base"></i>
-          <span>Khách ở</span>
+          <i class="fa-solid fa-clock-rotate-left text-base"></i>
+          <span>Lịch sử</span>
         </button>
         
         <!-- PROMINENT CENTER QR SCANNER BUTTON (Chính giữa, to nhất, nổi bật nhất) -->
@@ -1668,31 +1698,68 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
           </div>
         </div>
 
-        <!-- ================= TAB 2: KHÁCH ĐANG Ở (IN-HOUSE GUESTS) ================= -->
+        <!-- ================= TAB 2: LỊCH SỬ LƯU TRÚ (STAY HISTORY) ================= -->
         <div id="tabletTabGuests" class="space-y-3.5 hidden">
-          <!-- Guests Sub-header -->
-          <div class="bg-white p-3.5 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-3 shadow-xs">
-            <div>
-              <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
-                <i class="fa-solid fa-users text-amber-500"></i>
-                <span>Khách đang lưu trú tại Nhà Nghỉ Phúc Sơn</span>
-                <span class="text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full" id="tabletGuestsCountBadge">16 khách</span>
-              </h3>
-              <p class="text-[11px] text-slate-400 mt-0.5">Quản lý trả phòng nhanh, kiểm tra hồ sơ CCCD số hóa và thời gian ở thực tế</p>
-            </div>
-            <div class="flex items-center gap-2">
-              <div class="relative w-48 sm:w-64">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-                <input type="text" id="tabletGuestsSearch" oninput="renderTabletInHouseGuests()" placeholder="Tìm tên khách / CCCD / Phòng..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
+          <!-- Stay History Sub-header with Advanced Filter Bar -->
+          <div class="bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-xs space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                  <i class="fa-solid fa-clock-rotate-left text-blue-600"></i>
+                  <span>Lịch sử Lưu trú & Giao dịch Khách hàng</span>
+                  <span class="text-xs bg-blue-100 text-blue-800 font-bold px-2.5 py-0.5 rounded-full" id="tabletGuestsCountBadge">21 lượt</span>
+                </h3>
+                <p class="text-[11px] text-slate-400 mt-0.5">Tra cứu toàn diện hồ sơ khách đã và đang lưu trú, thời gian ở thực tế, số CCCD và thanh toán</p>
               </div>
-              <button onclick="openTabletCheckinScreen()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-sm active:scale-95 transition-all">
-                <i class="fa-solid fa-qrcode"></i>
-                <span>Check-in mới</span>
-              </button>
+
+              <!-- KPI chips -->
+              <div class="flex items-center gap-2 text-xs">
+                <div class="bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-xl flex items-center gap-1.5 shadow-2xs">
+                  <span class="text-slate-400 text-[10.5px]">Tổng cộng:</span>
+                  <b id="tabHistKpiTotal" class="text-slate-800 font-black">21</b>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl flex items-center gap-1.5 shadow-2xs">
+                  <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                  <span class="text-amber-800 text-[10.5px]">Đang ở:</span>
+                  <b id="tabHistKpiStaying" class="text-amber-700 font-black">15</b>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl flex items-center gap-1.5 shadow-2xs">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span class="text-emerald-800 text-[10.5px]">Đã trả phòng:</span>
+                  <b id="tabHistKpiCompleted" class="text-emerald-700 font-black">6</b>
+                </div>
+              </div>
+            </div>
+
+            <!-- Multi-Filter Toolbar -->
+            <div class="pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2.5 text-xs">
+              <!-- Status Filter segmented pills -->
+              <div class="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-xs flex-shrink-0">
+                <button onclick="filterTabletHistoryStatus('all')" id="tabHistStatusAll" class="tab-hist-status-btn px-3 py-1 rounded-lg font-bold bg-white text-slate-800 shadow-xs">Tất cả</button>
+                <button onclick="filterTabletHistoryStatus('staying')" id="tabHistStatusStaying" class="tab-hist-status-btn px-3 py-1 rounded-lg font-semibold text-slate-500 hover:text-amber-700">Đang ở</button>
+                <button onclick="filterTabletHistoryStatus('checked_out')" id="tabHistStatusOut" class="tab-hist-status-btn px-3 py-1 rounded-lg font-semibold text-slate-500 hover:text-emerald-700">Đã trả phòng</button>
+              </div>
+
+              <!-- Search Input & Room Filter & Export -->
+              <div class="flex items-center gap-2 flex-1 justify-end min-w-[280px]">
+                <div class="relative flex-1 max-w-xs">
+                  <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                  <input type="text" id="tabletGuestsSearch" oninput="handleTabletHistorySearch(this.value)" placeholder="Tìm tên khách / CCCD / Số phòng..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
+                </div>
+
+                <select id="tabFilterHistoryRoom" onchange="handleTabletHistoryRoomFilter(this.value)" class="text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-slate-700 focus:outline-none focus:border-blue-500">
+                  <option value="">Tất cả phòng</option>
+                </select>
+
+                <button onclick="exportHistoryCsv()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs flex items-center gap-1.5 transition-colors whitespace-nowrap" title="Xuất file CSV/Excel">
+                  <i class="fa-solid fa-file-export text-slate-500"></i>
+                  <span class="hidden sm:inline">Xuất CSV</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          <!-- In-House Guests Responsive Grid (2-3 columns on tablet) -->
+          <!-- History Responsive Grid (2 columns in Portrait, 3 columns in Landscape) -->
           <div id="tabletGuestsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pb-2">
             <!-- Rendered Dynamically by renderTabletInHouseGuests() -->
           </div>
@@ -1941,8 +2008,8 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
         </button>
         
         <button onclick="tabletSwitchTab('guests')" id="tabletNavGuests" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 font-semibold text-xs w-20 py-1 transition-colors">
-          <i class="fa-solid fa-users text-lg"></i>
-          <span>Khách ở (<span id="tabletNavGuestBadge">16</span>)</span>
+          <i class="fa-solid fa-clock-rotate-left text-lg"></i>
+          <span>Lịch sử (<span id="tabletNavGuestBadge">21</span>)</span>
         </button>
         
         <!-- PROMINENT CENTER QR SCANNER BUTTON (Chính giữa, nổi bật, to nhất) -->
@@ -2682,12 +2749,30 @@ var DEFAULT_ROOMS = [
 ];
 
 var DEFAULT_HISTORY = [
+  // Đang lưu trú (Active Staying)
   { id: 1, room: '101', guestName: 'Nguyễn Văn An', cccd: '038091023456', phone: '0912 345 678', checkin: '2026-10-25 08:30', checkout: '--', status: 'staying', staff: 'letan.lananh' },
   { id: 2, room: '101', guestName: 'Trần Thị Bích', cccd: '001085067234', phone: '0976 123 456', checkin: '2026-10-25 08:30', checkout: '--', status: 'staying', staff: 'letan.lananh' },
   { id: 3, room: '103', guestName: 'Lê Quốc Cường', cccd: '031094078912', phone: '0909 876 543', checkin: '2026-10-25 15:15', checkout: '--', status: 'staying', staff: 'letan.lananh' },
-  { id: 4, room: '102', guestName: 'Đinh Công Hải', cccd: '060092012345', phone: '0965 432 109', checkin: '2026-10-24 10:00', checkout: '2026-10-25 11:30', status: 'checked_out', staff: 'letan.tuananh' },
-  { id: 5, room: '205', guestName: 'Bùi Thị Thu Hương', cccd: '042087056789', phone: '0911 098 765', checkin: '2026-10-24 14:00', checkout: '2026-10-25 12:00', status: 'checked_out', staff: 'letan.lananh' },
-  { id: 6, room: '201', guestName: 'Hoàng Minh Đức', cccd: '079096051234', phone: '0888 234 567', checkin: '2026-10-25 10:00', checkout: '--', status: 'staying', staff: 'letan.lananh' },
+  { id: 4, room: '105', guestName: 'Phạm Thị Dung', cccd: '052088034567', phone: '0933 112 233', checkin: '2026-10-24 14:00', checkout: '--', status: 'staying', staff: 'letan.lananh' },
+  { id: 5, room: '201', guestName: 'Hoàng Minh Đức', cccd: '079096051234', phone: '0888 234 567', checkin: '2026-10-25 10:00', checkout: '--', status: 'staying', staff: 'letan.lananh' },
+  { id: 6, room: '201', guestName: 'Nguyễn Thị Lan', cccd: '001198089123', phone: '0945 678 901', checkin: '2026-10-25 10:00', checkout: '--', status: 'staying', staff: 'letan.lananh' },
+  { id: 7, room: '203', guestName: 'Đinh Công Hải', cccd: '060092012345', phone: '0965 432 109', checkin: '2026-10-24 19:30', checkout: '--', status: 'staying', staff: 'letan.tuananh' },
+  { id: 8, room: '203', guestName: 'Bùi Thị Thu Hương', cccd: '042087056789', phone: '0911 098 765', checkin: '2026-10-24 19:30', checkout: '--', status: 'staying', staff: 'letan.tuananh' },
+  { id: 9, room: '301', guestName: 'Ngô Thanh Khoa', cccd: '083097089012', phone: '0923 345 678', checkin: '2026-10-25 16:40', checkout: '--', status: 'staying', staff: 'letan.lananh' },
+  { id: 10, room: '302', guestName: 'Lý Thị Mỹ Linh', cccd: '091090023456', phone: '0956 789 012', checkin: '2026-10-25 11:20', checkout: '--', status: 'staying', staff: 'letan.lananh' },
+  { id: 11, room: '304', guestName: 'Nguyễn Văn An', cccd: '038091023456', phone: '0912 345 678', checkin: '2026-10-24 16:00', checkout: '--', status: 'staying', staff: 'letan.lananh' },
+  { id: 12, room: '401', guestName: 'Trần Thị Bích', cccd: '001085067234', phone: '0976 123 456', checkin: '2026-10-25 12:00', checkout: '--', status: 'staying', staff: 'letan.lananh' },
+  { id: 13, room: '403', guestName: 'Lê Quốc Cường', cccd: '031094078912', phone: '0909 876 543', checkin: '2026-10-25 14:10', checkout: '--', status: 'staying', staff: 'letan.lananh' },
+  { id: 14, room: '404', guestName: 'Phạm Thị Dung', cccd: '052088034567', phone: '0933 112 233', checkin: '2026-10-24 21:00', checkout: '--', status: 'staying', staff: 'letan.tuananh' },
+  { id: 15, room: '404', guestName: 'Hoàng Minh Đức', cccd: '079096051234', phone: '0888 234 567', checkin: '2026-10-24 21:00', checkout: '--', status: 'staying', staff: 'letan.tuananh' },
+
+  // Đã trả phòng (Checked Out History)
+  { id: 16, room: '102', guestName: 'Trần Văn Nam', cccd: '024090011223', phone: '0981 123 789', checkin: '2026-10-24 10:00', checkout: '2026-10-25 11:30', status: 'checked_out', staff: 'letan.tuananh' },
+  { id: 17, room: '205', guestName: 'Lê Thị Hạnh', cccd: '036093044556', phone: '0932 456 123', checkin: '2026-10-24 14:00', checkout: '2026-10-25 12:00', status: 'checked_out', staff: 'letan.lananh' },
+  { id: 18, room: '104', guestName: 'Đỗ Quang Khải', cccd: '040089033221', phone: '0919 888 999', checkin: '2026-10-25 09:00', checkout: '2026-10-25 17:30', status: 'checked_out', staff: 'letan.lananh' },
+  { id: 19, room: '202', guestName: 'Hoàng Tuấn Kiệt', cccd: '051095066778', phone: '0903 555 666', checkin: '2026-10-23 15:00', checkout: '2026-10-24 14:15', status: 'checked_out', staff: 'letan.tuananh' },
+  { id: 20, room: '303', guestName: 'Vũ Thùy Trang', cccd: '068097088990', phone: '0977 444 333', checkin: '2026-10-22 18:00', checkout: '2026-10-23 20:00', status: 'checked_out', staff: 'letan.lananh' },
+  { id: 21, room: '402', guestName: 'Nguyễn Tiến Dũng', cccd: '015091045678', phone: '0966 222 111', checkin: '2026-10-21 11:00', checkout: '2026-10-22 12:30', status: 'checked_out', staff: 'letan.lananh' }
 ];
 
 var DEFAULT_LOGS = [
@@ -2731,6 +2816,12 @@ var STATE = {
   tabletHistorySubtab: 'history',
   tabletTempGuests: [],
   isTabletCameraRunning: false,
+  mobileHistoryStatusFilter: 'all',
+  mobileHistorySearch: '',
+  mobileHistoryRoom: '',
+  tabletHistoryStatusFilter: 'all',
+  tabletHistorySearch: '',
+  tabletHistoryRoom: '',
 };
 
 function saveState() {
@@ -2747,6 +2838,34 @@ function saveState() {
   }
 }
 
+function syncActiveRoomsToHistory() {
+  if (!STATE.history) STATE.history = [];
+  if (!STATE.rooms) return;
+
+  STATE.rooms.forEach(function(room) {
+    if (room.status === 'occupied' && room.guests && room.guests.length > 0) {
+      room.guests.forEach(function(guest) {
+        var exists = STATE.history.some(function(h) {
+          return h.room === room.number && h.cccd === guest.cccd && h.status === 'staying';
+        });
+        if (!exists) {
+          STATE.history.unshift({
+            id: 'H_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+            room: room.number,
+            guestName: guest.name,
+            cccd: guest.cccd,
+            phone: guest.phone || '',
+            checkin: room.checkinTime || '2026-10-25 08:30',
+            checkout: '--',
+            status: 'staying',
+            staff: STATE.currentUser ? STATE.currentUser.username : 'letan.lananh'
+          });
+        }
+      });
+    }
+  });
+}
+
 function loadState() {
   var r = localStorage.getItem('checkins_rooms');
   var h = localStorage.getItem('checkins_history');
@@ -2758,6 +2877,11 @@ function loadState() {
 
   STATE.rooms = r ? JSON.parse(r) : JSON.parse(JSON.stringify(DEFAULT_ROOMS));
   STATE.history = h ? JSON.parse(h) : JSON.parse(JSON.stringify(DEFAULT_HISTORY));
+  if (!h || (STATE.history && STATE.history.length < 15)) {
+    STATE.history = JSON.parse(JSON.stringify(DEFAULT_HISTORY));
+  }
+  syncActiveRoomsToHistory();
+
   STATE.customers = c ? JSON.parse(c) : JSON.parse(JSON.stringify(DEFAULT_GUESTS));
   STATE.logs = l ? JSON.parse(l) : JSON.parse(JSON.stringify(DEFAULT_LOGS));
   STATE.users = u ? JSON.parse(u) : JSON.parse(JSON.stringify(DEFAULT_USERS));
@@ -2917,6 +3041,7 @@ function handleScannedGuestResult(guest) {
 // ==================== 4.4 UI RENDERING ENGINE ====================
 
 function refreshAllViews() {
+  syncActiveRoomsToHistory();
   updateKpis();
   renderDashboardRecent();
   renderRoomsGrid();
@@ -2928,6 +3053,7 @@ function refreshAllViews() {
   renderTabletScreen();
   populateVacantRoomsDropdown();
   populateMobileVacantRooms();
+  populateHistoryRoomDropdowns();
 }
 
 function updateKpis() {
@@ -3238,6 +3364,128 @@ function renderLogsTable() {
 
 // ==================== 4.5 MOBILE APP SIMULATOR ====================
 
+function populateHistoryRoomDropdowns() {
+  var mobSel = document.getElementById('mobFilterHistoryRoom');
+  var tabSel = document.getElementById('tabFilterHistoryRoom');
+  var rooms = STATE.rooms || [];
+  
+  var options = '<option value="">Tất cả phòng</option>' + rooms.map(function(r) {
+    return '<option value="' + r.number + '">P.' + r.number + ' (' + r.type + ')</option>';
+  }).join('');
+
+  if (mobSel && mobSel.options.length <= 1) {
+    mobSel.innerHTML = options;
+  }
+  if (tabSel && tabSel.options.length <= 1) {
+    tabSel.innerHTML = options;
+  }
+}
+
+function printCheckoutInvoiceDemo(roomNumber) {
+  showToast('🖨️ Đang in phiếu thanh toán & lịch sử lưu trú P.' + roomNumber + '...', 'info');
+  setTimeout(function() {
+    showToast('✅ Đã in phiếu lưu trú P.' + roomNumber + ' thành công (Máy in K80)', 'success');
+  }, 600);
+}
+
+function filterMobileHistoryStatus(status) {
+  STATE.mobileHistoryStatusFilter = status;
+  document.querySelectorAll('.mob-hist-status-btn').forEach(function(btn) {
+    btn.className = 'mob-hist-status-btn px-2 py-1 rounded-lg font-semibold text-slate-500 hover:text-slate-700';
+  });
+  var activeBtn = document.getElementById(status === 'staying' ? 'mobHistStatusStaying' : (status === 'checked_out' ? 'mobHistStatusOut' : 'mobHistStatusAll'));
+  if (activeBtn) activeBtn.className = 'mob-hist-status-btn px-2 py-1 rounded-lg font-bold bg-white text-slate-800 shadow-xs';
+  renderMobileHistory();
+}
+
+function handleMobileHistorySearch(val) {
+  STATE.mobileHistorySearch = val;
+  renderMobileHistory();
+}
+
+function handleMobileHistoryRoomFilter(val) {
+  STATE.mobileHistoryRoom = val;
+  renderMobileHistory();
+}
+
+function renderMobileHistory() {
+  syncActiveRoomsToHistory();
+  var container = document.getElementById('mobGuestsList');
+  if (!container) return;
+
+  var statusFilter = STATE.mobileHistoryStatusFilter || 'all';
+  var search = (STATE.mobileHistorySearch || '').toLowerCase().trim();
+  var roomFilter = STATE.mobileHistoryRoom || '';
+
+  var list = (STATE.history || []).filter(function(item) {
+    if (statusFilter !== 'all' && item.status !== statusFilter) return false;
+    if (roomFilter && item.room !== roomFilter) return false;
+    if (search) {
+      var matchName = (item.guestName || '').toLowerCase().includes(search);
+      var matchCccd = (item.cccd || '').includes(search);
+      var matchRoom = (item.room || '').toLowerCase().includes(search);
+      var matchPhone = (item.phone || '').includes(search);
+      if (!matchName && !matchCccd && !matchRoom && !matchPhone) return false;
+    }
+    return true;
+  });
+
+  var badge = document.getElementById('mobHistoryTotalBadge');
+  if (badge) badge.textContent = list.length + ' lượt';
+
+  if (list.length === 0) {
+    container.innerHTML = '<div class="p-8 text-center bg-white rounded-2xl border border-dashed border-slate-300 text-slate-400 text-xs">'
+      + '<i class="fa-solid fa-clock-rotate-left text-3xl text-slate-300 mb-2 block"></i>'
+      + 'Không có bản ghi lưu trú nào khớp với bộ lọc.'
+      + '</div>';
+    return;
+  }
+
+  container.innerHTML = list.map(function(item) {
+    var isStaying = item.status === 'staying';
+    var statusBadge = isStaying
+      ? '<span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full border border-amber-200 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Đang ở</span>'
+      : '<span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Đã trả</span>';
+
+    return '<div class="bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs space-y-2.5">'
+      + '<div class="flex items-start justify-between">'
+      +   '<div class="flex items-center gap-2.5">'
+      +     '<div class="w-9 h-9 rounded-xl ' + (isStaying ? 'bg-amber-500 text-white' : 'bg-slate-700 text-white') + ' font-extrabold flex items-center justify-center text-xs shadow-xs">'
+      +       getUserInitials(item.guestName)
+      +     '</div>'
+      +     '<div>'
+      +       '<div class="font-bold text-xs text-slate-800">' + item.guestName + '</div>'
+      +       '<div class="text-[10px] font-mono text-slate-400 mt-0.5">' + item.cccd + (item.phone ? ' · ' + item.phone : '') + '</div>'
+      +     '</div>'
+      +   '</div>'
+      +   '<div class="flex flex-col items-end gap-1">'
+      +     '<span class="font-black text-xs ' + (isStaying ? 'text-amber-800 bg-amber-50 border-amber-200' : 'text-slate-700 bg-slate-100 border-slate-200') + ' px-2 py-0.5 rounded-lg border font-mono">P.' + item.room + '</span>'
+      +     statusBadge
+      +   '</div>'
+      + '</div>'
+      + '<div class="pt-2 border-t border-slate-100 grid grid-cols-2 gap-1.5 text-[11px] text-slate-600">'
+      +   '<div><span class="text-slate-400 text-[10px] block">Vào:</span> <b class="font-mono text-slate-700 text-[10.5px]">' + item.checkin + '</b></div>'
+      +   '<div><span class="text-slate-400 text-[10px] block">Ra:</span> <b class="' + (isStaying ? 'text-amber-700 font-bold' : 'text-slate-700 font-mono text-[10.5px]') + '">' + (isStaying ? 'Đang lưu trú' : item.checkout) + '</b></div>'
+      + '</div>'
+      + '<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">'
+      +   '<span class="text-[10px] text-slate-400">NV: ' + (item.staff || 'Lễ tân') + '</span>'
+      +   '<div class="flex items-center gap-1.5">'
+      +     '<button onclick="viewCccdDetailByCccd(\'' + item.cccd + '\')" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-lg text-[10.5px] transition-colors">'
+      +       '<i class="fa-solid fa-id-card mr-1 text-[10px]"></i>CCCD'
+      +     '</button>'
+      +     (isStaying
+              ? '<button onclick="openCheckoutModalForRoom(\'' + item.room + '\')" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg text-[10.5px] shadow-xs active:scale-95 transition-all">'
+                + '<i class="fa-solid fa-receipt mr-1 text-[9.5px]"></i>Trả phòng'
+                + '</button>'
+              : '<button onclick="printCheckoutInvoiceDemo(\'' + item.room + '\')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-[10.5px] transition-colors">'
+                + '<i class="fa-solid fa-print mr-1 text-[9.5px]"></i>In phiếu'
+                + '</button>')
+      +   '</div>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
 function renderMobileScreen() {
   var grid = document.getElementById('mobRoomsGrid');
   if (!grid) return;
@@ -3265,26 +3513,9 @@ function renderMobileScreen() {
       + '</div>';
   }).join('');
 
-  // Mobile Active Guests Tab
-  var guestListEl = document.getElementById('mobGuestsList');
-  if (guestListEl) {
-    var activeOccupied = STATE.rooms.filter(function(r) { return r.status === 'occupied'; });
-    if (activeOccupied.length === 0) {
-      guestListEl.innerHTML = '<div class="p-6 text-center text-xs text-slate-400">Không có khách đang lưu trú</div>';
-    } else {
-      guestListEl.innerHTML = activeOccupied.map(function(room) {
-        return '<div class="bg-white p-3 rounded-xl border border-slate-200/80 shadow-sm flex items-center justify-between">'
-          + '<div>'
-          +   '<div class="font-bold text-slate-800 text-xs">Phòng ' + room.number + ' · ' + room.guests.map(function(g){return g.name;}).join(', ') + '</div>'
-          +   '<div class="text-[10px] text-slate-400 font-mono mt-0.5">' + (room.guests[0] ? room.guests[0].cccd : '') + ' · Vào: ' + (room.checkinTime ? room.checkinTime.split(' ')[1] : '') + '</div>'
-          + '</div>'
-          + '<button onclick="openCheckoutModalForRoom(\'' + room.number + '\')" class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg font-bold text-[11px] border border-amber-200">'
-          +   'Trả phòng'
-          + '</button>'
-          + '</div>';
-      }).join('');
-    }
-  }
+  // Render Mobile Stay History
+  populateHistoryRoomDropdowns();
+  renderMobileHistory();
 }
 
 function handleMobileRoomTap(roomNumber) {
@@ -3319,6 +3550,8 @@ function mobileSwitchTab(tab) {
   } else if (tab === 'guests') {
     document.getElementById('mobTabGuests').classList.remove('hidden');
     document.getElementById('mobNavGuests').className = 'flex flex-col items-center gap-1 text-blue-600 font-semibold text-[10px] w-12 py-1';
+    populateHistoryRoomDropdowns();
+    renderMobileHistory();
   } else if (tab === 'stats') {
     document.getElementById('mobTabStats').classList.remove('hidden');
     document.getElementById('mobNavStats').className = 'flex flex-col items-center gap-1 text-blue-600 font-semibold text-[10px] w-12 py-1';
@@ -3830,6 +4063,26 @@ function renderTabletRoomsGrid() {
   }).join('');
 }
 
+function filterTabletHistoryStatus(status) {
+  STATE.tabletHistoryStatusFilter = status;
+  document.querySelectorAll('.tab-hist-status-btn').forEach(function(btn) {
+    btn.className = 'tab-hist-status-btn px-3 py-1 rounded-lg font-semibold text-slate-500 hover:text-slate-700';
+  });
+  var activeBtn = document.getElementById(status === 'staying' ? 'tabHistStatusStaying' : (status === 'checked_out' ? 'tabHistStatusOut' : 'tabHistStatusAll'));
+  if (activeBtn) activeBtn.className = 'tab-hist-status-btn px-3 py-1 rounded-lg font-bold bg-white text-slate-800 shadow-xs';
+  renderTabletInHouseGuests();
+}
+
+function handleTabletHistorySearch(val) {
+  STATE.tabletHistorySearch = val;
+  renderTabletInHouseGuests();
+}
+
+function handleTabletHistoryRoomFilter(val) {
+  STATE.tabletHistoryRoom = val;
+  renderTabletInHouseGuests();
+}
+
 function tabletSwitchTab(tab) {
   STATE.tabletActiveTab = tab;
 
@@ -3856,6 +4109,7 @@ function tabletSwitchTab(tab) {
     if (g) g.classList.remove('hidden');
     var bG = document.getElementById('tabletNavGuests');
     if (bG) bG.className = 'flex flex-col items-center gap-1 text-blue-600 font-bold text-xs w-20 py-1 transition-colors';
+    populateHistoryRoomDropdowns();
     renderTabletInHouseGuests();
   } else if (tab === 'stats') {
     var s = document.getElementById('tabletTabStats');
@@ -3873,67 +4127,104 @@ function tabletSwitchTab(tab) {
 }
 
 function renderTabletInHouseGuests() {
+  syncActiveRoomsToHistory();
   var grid = document.getElementById('tabletGuestsGrid');
-  var badge = document.getElementById('tabletGuestsCountBadge');
   if (!grid) return;
 
-  var query = (document.getElementById('tabletGuestsSearch') ? document.getElementById('tabletGuestsSearch').value : '').toLowerCase().trim();
-  var occupiedRooms = STATE.rooms.filter(function(r) { return r.status === 'occupied'; });
+  var statusFilter = STATE.tabletHistoryStatusFilter || 'all';
+  var search = (STATE.tabletHistorySearch || '').toLowerCase().trim();
+  var roomFilter = STATE.tabletHistoryRoom || '';
 
-  var totalGuests = 0;
-  occupiedRooms.forEach(function(r) { if (r.guests) totalGuests += r.guests.length; });
-  if (badge) badge.textContent = totalGuests + ' khách';
+  var allHistory = STATE.history || [];
+  var totalStaying = allHistory.filter(function(h) { return h.status === 'staying'; }).length;
+  var totalCompleted = allHistory.filter(function(h) { return h.status === 'checked_out'; }).length;
 
-  var filteredRooms = occupiedRooms.filter(function(room) {
-    if (!query) return true;
-    var matchNum = room.number.toLowerCase().includes(query);
-    var matchGuests = room.guests && room.guests.some(function(g) {
-      return g.name.toLowerCase().includes(query) || g.cccd.includes(query) || (g.phone && g.phone.includes(query));
-    });
-    return matchNum || matchGuests;
+  // Update KPI counters
+  var kpiTotal = document.getElementById('tabHistKpiTotal');
+  var kpiStaying = document.getElementById('tabHistKpiStaying');
+  var kpiOut = document.getElementById('tabHistKpiCompleted');
+  var badgeNav = document.getElementById('tabletNavGuestBadge');
+  if (kpiTotal) kpiTotal.textContent = allHistory.length;
+  if (kpiStaying) kpiStaying.textContent = totalStaying;
+  if (kpiOut) kpiOut.textContent = totalCompleted;
+  if (badgeNav) badgeNav.textContent = allHistory.length;
+
+  var filteredList = allHistory.filter(function(item) {
+    if (statusFilter !== 'all' && item.status !== statusFilter) return false;
+    if (roomFilter && item.room !== roomFilter) return false;
+    if (search) {
+      var matchName = (item.guestName || '').toLowerCase().includes(search);
+      var matchCccd = (item.cccd || '').includes(search);
+      var matchRoom = (item.room || '').toLowerCase().includes(search);
+      var matchPhone = (item.phone || '').includes(search);
+      if (!matchName && !matchCccd && !matchRoom && !matchPhone) return false;
+    }
+    return true;
   });
 
-  if (filteredRooms.length === 0) {
-    grid.innerHTML = '<div class="col-span-full p-10 text-center bg-white rounded-3xl border border-dashed border-slate-300 text-slate-400 text-xs">'
-      + '<i class="fa-solid fa-users text-3xl text-slate-300 mb-2 block"></i>'
-      + 'Không có khách nào phù hợp với từ khóa tìm kiếm.'
+  var badge = document.getElementById('tabletGuestsCountBadge');
+  if (badge) badge.textContent = filteredList.length + ' lượt lưu trú';
+
+  if (filteredList.length === 0) {
+    grid.innerHTML = '<div class="col-span-full p-12 text-center bg-white rounded-3xl border border-dashed border-slate-300 text-slate-400 text-xs">'
+      + '<i class="fa-solid fa-clock-rotate-left text-4xl text-slate-300 mb-3 block"></i>'
+      + '<span class="font-bold text-sm text-slate-600 block mb-1">Không tìm thấy bản ghi lịch sử lưu trú</span>'
+      + 'Vui lòng thay đổi từ khóa tìm kiếm hoặc điều chỉnh lại bộ lọc phòng/trạng thái.'
       + '</div>';
     return;
   }
 
-  grid.innerHTML = filteredRooms.map(function(room) {
-    var mainGuest = room.guests && room.guests[0] ? room.guests[0] : { name: 'Khách hàng', cccd: '--', phone: '' };
-    var duration = calculateStayDuration(room.checkinTime);
-    var otherGuestsCount = room.guests && room.guests.length > 1 ? room.guests.length - 1 : 0;
+  grid.innerHTML = filteredList.map(function(item) {
+    var isStaying = item.status === 'staying';
+    var roomObj = STATE.rooms.find(function(r) { return r.number === item.room; });
+    var roomType = roomObj ? roomObj.type : 'Đơn';
+    var customer = STATE.customers.find(function(c) { return c.cccd === item.cccd; });
+    var address = customer ? customer.address : 'Việt Nam';
 
-    return '<div class="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-3">'
+    var statusBadge = isStaying
+      ? '<span class="badge badge-occupied text-xs px-2.5 py-0.5 font-bold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> Đang ở</span>'
+      : '<span class="badge badge-vacant text-xs px-2.5 py-0.5 font-bold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Đã trả phòng</span>';
+
+    return '<div class="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs flex flex-col justify-between space-y-3 transition-all hover:shadow-xs">'
       + '<div>'
-      +   '<div class="flex items-start justify-between">'
-      +     '<div class="flex items-center gap-3">'
-      +       '<div class="w-10 h-10 rounded-2xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-sm shadow-sm">'
-      +         getUserInitials(mainGuest.name)
+      +   '<div class="flex items-start justify-between gap-2">'
+      +     '<div class="flex items-center gap-3 min-w-0">'
+      +       '<div class="w-11 h-11 rounded-2xl ' + (isStaying ? 'bg-blue-600' : 'bg-slate-700') + ' text-white font-black flex items-center justify-center text-sm shadow-sm flex-shrink-0">'
+      +         getUserInitials(item.guestName)
       +       '</div>'
-      +       '<div>'
-      +         '<div class="font-extrabold text-sm text-slate-800">' + mainGuest.name + '</div>'
-      +         '<div class="text-[11px] font-mono text-slate-500 mt-0.5">' + mainGuest.cccd + '</div>'
+      +       '<div class="min-w-0">'
+      +         '<div class="font-extrabold text-sm text-slate-800 truncate" title="' + item.guestName + '">' + item.guestName + '</div>'
+      +         '<div class="text-xs font-mono text-slate-500 mt-0.5 flex items-center gap-1.5">'
+      +           '<span>' + item.cccd + '</span>'
+      +           (item.phone ? '<span>· ' + item.phone + '</span>' : '')
+      +         '</div>'
       +       '</div>'
       +     '</div>'
-      +     '<span class="font-black text-sm text-amber-700 bg-amber-50 px-2.5 py-1 rounded-xl border border-amber-200">P.' + room.number + '</span>'
+      +     '<div class="flex flex-col items-end gap-1 flex-shrink-0">'
+      +       '<span class="font-black text-sm text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-xl border border-amber-200">P.' + item.room + ' · ' + roomType + '</span>'
+      +       statusBadge
+      +     '</div>'
       +   '</div>'
       +   '<div class="mt-3 pt-2.5 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs text-slate-600">'
-      +     '<div><span class="text-slate-400 text-[10.5px] block">Vào phòng:</span> <b class="font-mono text-slate-700">' + (room.checkinTime || '--') + '</b></div>'
-      +     '<div><span class="text-slate-400 text-[10.5px] block">Thời gian ở:</span> <b class="text-amber-700">' + duration.humanShort + '</b></div>'
-      +     '<div class="col-span-2 text-[11px] text-slate-500 truncate"><i class="fa-solid fa-location-dot text-slate-400 mr-1 text-[10px]"></i>' + (mainGuest.address || 'Việt Nam') + '</div>'
-      +     (otherGuestsCount > 0 ? '<div class="col-span-2 text-[10.5px] text-blue-600 font-semibold">+ Đi cùng ' + otherGuestsCount + ' khách khác trong phòng</div>' : '')
+      +     '<div><span class="text-slate-400 text-[10.5px] block">Giờ vào:</span> <b class="font-mono text-slate-700">' + item.checkin + '</b></div>'
+      +     '<div><span class="text-slate-400 text-[10.5px] block">Giờ trả:</span> <b class="' + (isStaying ? 'text-amber-700 font-bold' : 'text-slate-700 font-mono') + '">' + (isStaying ? 'Đang lưu trú' : item.checkout) + '</b></div>'
+      +     '<div class="col-span-2 text-[11px] text-slate-500 truncate mt-0.5"><i class="fa-solid fa-location-dot text-slate-400 mr-1 text-[10px]"></i>' + address + '</div>'
       +   '</div>'
       + '</div>'
-      + '<div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2 text-xs">'
-      +   '<button onclick="viewCccdDetailByCccd(\'' + mainGuest.cccd + '\')" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl flex items-center gap-1.5 transition-colors">'
-      +     '<i class="fa-solid fa-id-card text-xs"></i> Xem CCCD'
-      +   '</button>'
-      +   '<button onclick="openCheckoutModalForRoom(\'' + room.number + '\')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-xs flex items-center gap-1.5 active:scale-95 transition-all">'
-      +     '<i class="fa-solid fa-receipt text-xs"></i> Trả phòng'
-      +   '</button>'
+      + '<div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">'
+      +   '<span class="text-[11px] text-slate-400 font-medium">Tiếp nhận: <b class="text-slate-600">' + (item.staff || 'letan.lananh') + '</b></span>'
+      +   '<div class="flex items-center gap-1.5">'
+      +     '<button onclick="viewCccdDetailByCccd(\'' + item.cccd + '\')" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl flex items-center gap-1.5 transition-colors">'
+      +       '<i class="fa-solid fa-id-card text-xs"></i> Xem CCCD'
+      +     '</button>'
+      +     (isStaying
+              ? '<button onclick="openCheckoutModalForRoom(\'' + item.room + '\')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-xs flex items-center gap-1.5 active:scale-95 transition-all">'
+                + '<i class="fa-solid fa-receipt text-xs"></i> Trả phòng'
+                + '</button>'
+              : '<button onclick="printCheckoutInvoiceDemo(\'' + item.room + '\')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl flex items-center gap-1.5 transition-colors">'
+                + '<i class="fa-solid fa-print text-xs"></i> In phiếu'
+                + '</button>')
+      +   '</div>'
       + '</div>'
       + '</div>';
   }).join('');
