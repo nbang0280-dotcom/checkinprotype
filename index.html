@@ -799,15 +799,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
   border-radius: 18px !important;
 }
 
-/* MOBILE PREVIEW (390px) & REAL SMARTPHONES MODALS */
-#desktopView.view-mobile .modal-backdrop,
-@media (max-width: 640px) {
-  .modal-backdrop {
-    padding: 44px 10px 14px 10px !important;
-    align-items: center !important;
-  }
-}
-
+/* MOBILE PREVIEW (390px) MODALS */
 #desktopView.view-mobile .modal-backdrop {
   position: absolute !important;
   inset: 0 !important;
@@ -819,8 +811,22 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
   justify-content: center !important;
 }
 
-#desktopView.view-mobile .modal-content,
+#desktopView.view-mobile .modal-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  max-height: calc(100% - 10px) !important;
+  padding: 14px 12px !important;
+  border-radius: 20px !important;
+  margin: 0 !important;
+  box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* REAL SMARTPHONES (VIEWPORT <= 640px) */
 @media (max-width: 640px) {
+  .modal-backdrop {
+    padding: 44px 10px 14px 10px !important;
+    align-items: center !important;
+  }
   .modal-content {
     width: 100% !important;
     max-width: 100% !important;
@@ -830,16 +836,6 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
     margin: 0 !important;
     box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.45) !important;
   }
-}
-
-#desktopView.view-mobile .modal-content {
-  width: 100% !important;
-  max-width: 100% !important;
-  max-height: calc(100% - 10px) !important;
-  padding: 14px 12px !important;
-  border-radius: 20px !important;
-  margin: 0 !important;
-  box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.45) !important;
 }
 
 /* Modal Check-in Specific Mobile Styling */
