@@ -907,8 +907,16 @@ table tbody tr:hover {
 /* RESPONSIVE MODALS (TABLET & MOBILE DEVICE FRAMES)              */
 /* ============================================================== */
 
+/* Guarantee hidden modals are ALWAYS hidden across all view modes */
+.modal-backdrop.hidden,
+#desktopView .modal-backdrop.hidden,
+#desktopView.view-mobile .modal-backdrop.hidden,
+#desktopView.view-tablet .modal-backdrop.hidden {
+  display: none !important;
+}
+
 /* TABLET PREVIEW (820px) MODALS */
-#desktopView.view-tablet .modal-backdrop {
+#desktopView.view-tablet .modal-backdrop:not(.hidden) {
   position: absolute !important;
   inset: 0 !important;
   z-index: 1000 !important;
@@ -925,7 +933,7 @@ table tbody tr:hover {
 }
 
 /* MOBILE PREVIEW (390px) MODALS */
-#desktopView.view-mobile .modal-backdrop {
+#desktopView.view-mobile .modal-backdrop:not(.hidden) {
   position: absolute !important;
   inset: 0 !important;
   z-index: 1000 !important;
@@ -948,7 +956,7 @@ table tbody tr:hover {
 
 /* REAL SMARTPHONES (VIEWPORT <= 640px) */
 @media (max-width: 640px) {
-  .modal-backdrop {
+  .modal-backdrop:not(.hidden) {
     padding: 44px 10px 14px 10px !important;
     align-items: center !important;
   }
@@ -5190,29 +5198,15 @@ function updateUserDisplays() {
 }
 
 function updateAuthUI() {
-  var mode = STATE.viewMode || 'desktop';
-  var isMobile = mode === 'mobile';
-  var isTablet = mode === 'tablet';
-  var isDesktop = mode === 'desktop';
-
   var dLogin = document.getElementById('desktopLoginView');
   var dView = document.getElementById('desktopView');
-  var mLogin = document.getElementById('mobScreenLogin');
-  var tLogin = document.getElementById('tabletScreenLogin');
-  var tContent = document.getElementById('tabletScreenContainer');
 
   if (STATE.isLoggedIn) {
     if (dLogin) dLogin.classList.add('hidden');
-    if (dView && isDesktop) dView.style.display = 'flex';
-    if (mLogin) mLogin.classList.add('hidden');
-    if (tLogin) tLogin.classList.add('hidden');
-    if (tContent && isTablet) tContent.style.display = 'block';
+    if (dView) dView.style.display = 'flex';
   } else {
     if (dView) dView.style.display = 'none';
-    if (dLogin && isDesktop) dLogin.classList.remove('hidden');
-    if (mLogin && isMobile) mLogin.classList.remove('hidden');
-    if (tContent) tContent.style.display = 'none';
-    if (tLogin && isTablet) tLogin.classList.remove('hidden');
+    if (dLogin) dLogin.classList.remove('hidden');
   }
   updateUserDisplays();
 }
