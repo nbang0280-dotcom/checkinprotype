@@ -26,11 +26,27 @@ tailwind.config = {
           50: '#eff6ff',
           100: '#dbeafe',
           200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
           500: '#3b82f6',
           600: '#2563eb',
           700: '#1d4ed8',
           800: '#1e40af',
           900: '#1e3a8a',
+          950: '#0f172a',
+        },
+        gold: {
+          50: '#fdfbf7',
+          100: '#fbf7ee',
+          200: '#f6ecda',
+          300: '#eedab9',
+          400: '#dfbc78',
+          500: '#d4af37',
+          600: '#be9226',
+          700: '#996f1d',
+          800: '#7d581e',
+          900: '#67471d',
+          accent: '#d4af37',
         },
         hotel: {
           vacant: '#10b981',
@@ -38,6 +54,13 @@ tailwind.config = {
           cleaning: '#8b5cf6',
           maintenance: '#ef4444'
         }
+      },
+      boxShadow: {
+        'soft': '0 2px 8px -2px rgba(15, 23, 42, 0.05), 0 1px 3px 0 rgba(15, 23, 42, 0.04)',
+        'card': '0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 1px 3px 0 rgba(15, 23, 42, 0.03)',
+        'card-hover': '0 14px 28px -4px rgba(15, 23, 42, 0.1), 0 2px 6px -1px rgba(15, 23, 42, 0.04)',
+        'glass': '0 8px 32px 0 rgba(15, 23, 42, 0.12)',
+        'inner-glow': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.6)'
       },
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
@@ -49,127 +72,197 @@ tailwind.config = {
 </script>
 
 <style>
+:root {
+  --color-primary-navy: #1e3a8a;
+  --color-primary-blue: #2563eb;
+  --color-accent-gold: #d4af37;
+  --shadow-soft: 0 2px 8px -2px rgba(15, 23, 42, 0.05), 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+  --shadow-card: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+  --shadow-hover: 0 14px 28px -4px rgba(15, 23, 42, 0.1), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --transition-smooth: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  --radius-card: 16px;
+}
+
 * { box-sizing: border-box; }
-body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #1e293b; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Micro-interactions & Accessible Interactive States */
+button, input, select, textarea, .nav-link, .badge, .room-card-box {
+  transition: var(--transition-smooth);
+}
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+  outline: none !important;
+}
+
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #f1f5f9; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
+/* Top Header - Liquid Glass */
 .glass-nav {
-  background: rgba(15, 23, 42, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.90);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.25);
 }
 
+/* Sidebar Nav Links - Soft UI Navigation */
 .nav-link {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 13.5px;
   font-weight: 500;
   color: #64748b;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
   cursor: pointer;
+  user-select: none;
 }
 .nav-link:hover {
-  color: #2563eb;
-  background: #eff6ff;
+  color: #1e40af;
+  background: #f1f5f9;
   transform: translateX(3px);
 }
 .nav-link.active {
-  color: #2563eb;
-  background: #eff6ff;
+  color: #1d4ed8;
+  background: linear-gradient(90deg, #eff6ff 0%, #ffffff 100%);
   font-weight: 600;
+  box-shadow: inset 0 0 0 1px #dbeafe;
+}
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  bottom: 7px;
+  width: 3.5px;
+  background: linear-gradient(180deg, #2563eb, #3b82f6);
+  border-radius: 0 4px 4px 0;
 }
 .nav-link.active i {
   color: #2563eb;
 }
 
+/* KPI Cards - Soft UI Evolution with Top Accent Lines */
 .kpi-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 20px;
-  transition: all 0.25s ease;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
-}
-.kpi-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
-}
-
-.room-card-box {
-  background: #ffffff;
-  border-radius: 14px;
-  border: 1.5px solid #e2e8f0;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 16px;
+  padding: 20px 22px;
+  box-shadow: var(--shadow-card);
   position: relative;
   overflow: hidden;
 }
+.kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3.5px;
+  background: transparent;
+  transition: var(--transition-smooth);
+}
+.kpi-card.border-l-blue-500::after { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+.kpi-card.border-l-emerald-500::after { background: linear-gradient(90deg, #059669, #34d399); }
+.kpi-card.border-l-amber-500::after { background: linear-gradient(90deg, #d97706, #fbbf24); }
+.kpi-card.border-l-purple-500::after { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+
+/* Room Cards - Hospitality Depth & Subtle Gradients */
+.room-card-box {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1.5px solid #e2e8f0;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
 .room-card-box:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-hover);
 }
 .room-card-box.status-vacant {
   border-color: #a7f3d0;
-  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 50px);
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 65px);
 }
 .room-card-box.status-occupied {
   border-color: #fde68a;
-  background: linear-gradient(180deg, #fffbeb 0%, #ffffff 50px);
+  background: linear-gradient(180deg, #fffbeb 0%, #ffffff 65px);
 }
 .room-card-box.status-cleaning {
   border-color: #ddd6fe;
-  background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 50px);
+  background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 65px);
 }
 .room-card-box.status-maintenance {
   border-color: #fecaca;
-  background: linear-gradient(180deg, #fef2f2 0%, #ffffff 50px);
+  background: linear-gradient(180deg, #fef2f2 0%, #ffffff 65px);
 }
 
+/* Badges - Accessible, High Contrast Status Indicators */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 9px;
+  gap: 5.5px;
+  padding: 3.5px 10px;
   border-radius: 9999px;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
 }
-.badge-vacant { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-.badge-occupied { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
-.badge-cleaning { background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; }
-.badge-maintenance { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+.badge-vacant { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+.badge-occupied { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+.badge-cleaning { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
+.badge-maintenance { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
 
+/* Modals - Liquid Glass Backdrop & Multi-Layer Elevated Surface */
 .modal-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px;
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   border-radius: inherit;
 }
 .modal-content {
   background: #ffffff;
-  border-radius: 18px;
-  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
   animation: zoomUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   max-height: 92vh;
   overflow-y: auto;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(226, 232, 240, 0.85);
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes zoomUp { from { opacity: 0; transform: scale(0.96) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-/* Toast */
+/* Toast Notifications - Elevated Glass Pill */
 #toastContainer {
   position: fixed;
   top: 75px;
@@ -184,20 +277,52 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
   pointer-events: auto;
   min-width: 300px;
   max-width: 420px;
-  background: #ffffff;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 14px;
   padding: 14px 18px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 14px 30px -4px rgba(15, 23, 42, 0.15), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
   display: flex;
   align-items: center;
   gap: 12px;
   border-left: 5px solid;
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+  border-right: 1px solid rgba(226, 232, 240, 0.8);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
   animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  font-size: 13.5px;
+  font-size: 13px;
+  font-weight: 500;
 }
 @keyframes slideInRight {
   from { opacity: 0; transform: translateX(50px); }
   to { opacity: 1; transform: translateX(0); }
+}
+
+/* Tables - High Scannability and Tabular Typography */
+table thead th {
+  letter-spacing: 0.04em;
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+table tbody tr {
+  transition: background-color 0.15s ease;
+}
+table tbody tr:hover {
+  background-color: rgba(241, 245, 249, 0.75) !important;
+}
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @keyframes qrScanLine {
@@ -999,13 +1124,16 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
 <!-- TOP MASTER BAR -->
 <header class="glass-nav fixed top-0 left-0 right-0 h-14 z-50 flex items-center justify-between px-6 text-white">
   <div class="flex items-center gap-3">
-    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-500/20">
+    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-blue-500 flex items-center justify-center shadow-md shadow-blue-500/25 border border-white/10 ring-1 ring-white/10">
       <i class="fa-solid fa-hotel text-white text-base"></i>
     </div>
     <div>
       <div class="flex items-center gap-2">
-        <span class="font-extrabold text-base tracking-tight text-white">Nhà Nghỉ <span class="text-blue-400">Phúc Sơn</span></span>
-        <span class="bg-blue-500/20 text-blue-300 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-blue-400/30">CheckIns QR Pro</span>
+        <span class="font-extrabold text-base tracking-tight text-white">Nhà Nghỉ <span class="bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-400 bg-clip-text text-transparent font-black">Phúc Sơn</span></span>
+        <span class="bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-300 text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-blue-400/30 shadow-xs flex items-center gap-1">
+          <i class="fa-solid fa-crown text-[9px] text-amber-400"></i>
+          <span>CheckIns QR Pro</span>
+        </span>
       </div>
     </div>
   </div>
@@ -1288,14 +1416,14 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
           <div class="kpi-card border-l-4 border-l-blue-500">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-xs font-semibold text-slate-500 uppercase">Tổng số phòng</p>
-                <p class="text-2xl font-extrabold text-slate-800 mt-1" id="kpiTotalRooms">20</p>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tổng số phòng</p>
+                <p class="text-2xl font-extrabold text-slate-800 mt-1 font-mono tabular-nums" id="kpiTotalRooms">20</p>
                 <div class="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1.5">
                   <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                   <span>4 tầng lưu trú</span>
                 </div>
               </div>
-              <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+              <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shadow-xs">
                 <i class="fa-solid fa-hotel"></i>
               </div>
             </div>
@@ -1304,14 +1432,14 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
           <div class="kpi-card border-l-4 border-l-emerald-500">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-xs font-semibold text-slate-500 uppercase">Phòng Trống Sạch</p>
-                <p class="text-2xl font-extrabold text-emerald-600 mt-1" id="kpiVacantRooms">8</p>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Phòng Trống Sạch</p>
+                <p class="text-2xl font-extrabold text-emerald-600 mt-1 font-mono tabular-nums" id="kpiVacantRooms">8</p>
                 <div class="flex items-center gap-1.5 text-[11px] text-emerald-600 font-medium mt-1.5">
                   <i class="fa-solid fa-check"></i>
                   <span>Sẵn sàng đón khách</span>
                 </div>
               </div>
-              <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shadow-xs">
                 <i class="fa-solid fa-door-open"></i>
               </div>
             </div>
@@ -1320,14 +1448,14 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
           <div class="kpi-card border-l-4 border-l-amber-500">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-xs font-semibold text-slate-500 uppercase">Đang có khách ở</p>
-                <p class="text-2xl font-extrabold text-amber-600 mt-1" id="kpiOccupiedRooms">10</p>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Đang có khách ở</p>
+                <p class="text-2xl font-extrabold text-amber-600 mt-1 font-mono tabular-nums" id="kpiOccupiedRooms">10</p>
                 <div class="flex items-center gap-1.5 text-[11px] text-amber-600 font-medium mt-1.5">
                   <i class="fa-solid fa-users"></i>
                   <span id="kpiTotalGuestsStaying">16 khách đang lưu trú</span>
                 </div>
               </div>
-              <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+              <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shadow-xs">
                 <i class="fa-solid fa-user-check"></i>
               </div>
             </div>
@@ -1336,14 +1464,14 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
           <div class="kpi-card border-l-4 border-l-purple-500">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-xs font-semibold text-slate-500 uppercase">Chờ dọn dẹp</p>
-                <p class="text-2xl font-extrabold text-purple-600 mt-1" id="kpiCleaningRooms">2</p>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Chờ dọn dẹp</p>
+                <p class="text-2xl font-extrabold text-purple-600 mt-1 font-mono tabular-nums" id="kpiCleaningRooms">2</p>
                 <div class="flex items-center gap-1.5 text-[11px] text-purple-600 font-medium mt-1.5">
                   <i class="fa-solid fa-broom"></i>
                   <span>Cần buồng phòng dọn</span>
                 </div>
               </div>
-              <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+              <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl shadow-xs">
                 <i class="fa-solid fa-sparkles"></i>
               </div>
             </div>
@@ -2644,7 +2772,7 @@ function renderSingleRoomCard(room) {
   }
 
   var cardPadding = isMobile ? 'p-3' : 'p-4';
-  var roomNumClass = isMobile ? 'text-base font-extrabold text-slate-800 tracking-tight' : 'text-xl font-extrabold text-slate-800 tracking-tight';
+  var roomNumClass = isMobile ? 'text-base font-extrabold text-slate-800 tracking-tight font-mono tabular-nums' : 'text-xl font-extrabold text-slate-800 tracking-tight font-mono tabular-nums';
 
   return '<div class="room-card-box status-' + room.status + ' ' + cardPadding + ' flex flex-col justify-between">'
     + '<div>'
@@ -2784,11 +2912,11 @@ function renderLogsTable() {
   tbody.innerHTML = STATE.logs.map(function(l) {
     var actionColor = l.action.includes('CHECK-IN') ? 'text-emerald-600 font-bold' : (l.action.includes('CHECK-OUT') ? 'text-amber-600 font-bold' : 'text-blue-600 font-bold');
     return '<tr class="hover:bg-slate-50 transition-colors">'
-      + '<td class="px-5 py-2.5 text-slate-500">' + l.time + '</td>'
+      + '<td class="px-5 py-2.5 text-slate-500 font-mono tabular-nums text-xs">' + l.time + '</td>'
       + '<td class="px-5 py-2.5 text-slate-800 font-semibold">' + l.user + '</td>'
       + '<td class="px-5 py-2.5 ' + actionColor + '">' + l.action + '</td>'
       + '<td class="px-5 py-2.5 text-slate-700 font-sans">' + l.detail + '</td>'
-      + '<td class="px-5 py-2.5 text-slate-400">' + l.ip + '</td>'
+      + '<td class="px-5 py-2.5 text-slate-400 font-mono text-xs">' + l.ip + '</td>'
       + '</tr>';
   }).join('');
 }
