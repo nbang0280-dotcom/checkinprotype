@@ -199,33 +199,6 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
   to { opacity: 1; transform: translateX(0); }
 }
 
-/* Phone Mockup */
-#phoneFrame {
-  width: 400px;
-  height: 850px;
-  background: #090d16;
-  border-radius: 54px;
-  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.6), inset 0 0 0 3px #334155, 0 0 0 8px #0f172a;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-.phone-island {
-  position: absolute;
-  top: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 125px;
-  height: 32px;
-  background: #000000;
-  border-radius: 20px;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 12px;
-}
 @keyframes qrScanLine {
   0% { top: 6px; opacity: 0.7; }
   50% { opacity: 1; }
@@ -247,143 +220,503 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
   border-color: #38bdf8;
 }
 
-/* Tablet Mockup (iPad POS Counter Style) */
-#tabletViewWrapper {
-  transition: all 0.3s ease;
-}
-#tabletFrame {
-  width: 1080px;
-  max-width: 96vw;
-  height: 680px;
-  max-height: calc(100vh - 120px);
-  background: #090d16;
-  border-radius: 40px;
-  box-shadow: 0 35px 95px -15px rgba(0, 0, 0, 0.75), inset 0 0 0 3px #334155, 0 0 0 9px #0f172a;
-  position: relative;
-  overflow: hidden;
+/* ============================================================== */
+/* RESPONSIVE WEB SHELL (DESKTOP / TABLET 820px / MOBILE 414px)   */
+/* ============================================================== */
+#webAppWrapper {
+  min-height: calc(100vh - 56px);
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
-#tabletFrame.portrait {
-  width: 768px;
+
+#desktopView {
+  width: 100%;
+  height: calc(100vh - 56px);
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  background-color: #f8fafc;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- TABLET PREVIEW FRAME (820px) ---- */
+#desktopView.view-tablet {
+  width: 820px !important;
   max-width: 96vw;
-  height: 880px;
-  max-height: calc(100vh - 100px);
+  height: calc(100vh - 100px) !important;
+  margin: 16px auto;
+  border-radius: 22px;
+  /* Realistic device border: outer bezel + inner display */
+  box-shadow:
+    0 0 0 2px #475569,
+    0 0 0 5px #1e293b,
+    0 0 0 7px #0f172a,
+    0 32px 80px -10px rgba(0,0,0,0.6),
+    0 8px 24px rgba(0,0,0,0.3);
+  border: 3px solid #334155;
+  background: #090d16;
 }
-#tabletFrame.fullscreen-mode {
-  width: 100vw !important;
-  max-width: 100vw !important;
-  height: calc(100vh - 56px) !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  margin: 0 !important;
-  border: none !important;
+
+/* ---- MOBILE PREVIEW FRAME (414px) ---- */
+#desktopView.view-mobile {
+  width: 390px !important;
+  max-width: 96vw;
+  height: calc(100vh - 100px) !important;
+  margin: 16px auto;
+  border-radius: 44px;
+  /* iPhone-style deep bezel */
+  box-shadow:
+    0 0 0 2px #475569,
+    0 0 0 6px #1e293b,
+    0 0 0 8px #0f172a,
+    0 36px 90px -12px rgba(0,0,0,0.65),
+    0 8px 24px rgba(0,0,0,0.3);
+  border: 3px solid #334155;
+  background: #090d16;
 }
-.tablet-camera-dot {
+
+/* Dynamic island notch for mobile */
+#desktopView.view-mobile::before {
+  content: '';
   position: absolute;
-  top: 9px;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 28px;
+  background: #0a0a0a;
+  border-radius: 14px;
+  z-index: 999;
+  box-shadow: 0 0 0 2px #1e293b;
+  pointer-events: none;
+}
+
+/* Camera dot + mic for mobile notch */
+#desktopView.view-mobile::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: calc(50% + 36px);
+  width: 8px;
+  height: 8px;
+  background: #1a1a2e;
+  border-radius: 50%;
+  z-index: 1000;
+  box-shadow:
+    0 0 0 1.5px #222,
+    -14px 0 0 1px #111;
+  pointer-events: none;
+}
+
+/* Tablet camera dot */
+#desktopView.view-tablet::before {
+  content: '';
+  position: absolute;
+  top: 8px;
   left: 50%;
   transform: translateX(-50%);
   width: 8px;
   height: 8px;
   background: #1e293b;
   border-radius: 50%;
-  border: 1.5px solid #475569;
-  z-index: 50;
-  transition: all 0.3s ease;
-}
-#tabletFrame.portrait .tablet-camera-dot {
-  top: 9px;
-  left: 50%;
-  transform: translateX(-50%);
+  z-index: 999;
+  border: 1.5px solid #334155;
+  pointer-events: none;
 }
 
-/* Tablet Screen Scroll Container - Eliminate horizontal scrollbar */
-#tabletScreenContainer {
-  overflow-x: hidden !important;
+/* ---- SIDEBAR DRAWER (TABLET & MOBILE) ---- */
+#desktopView.view-tablet #btnToggleSidebar,
+#desktopView.view-mobile #btnToggleSidebar,
+#desktopView.view-tablet #btnCloseSidebarDrawer,
+#desktopView.view-mobile #btnCloseSidebarDrawer {
+  display: inline-flex !important;
 }
 
-/* Tablet Rooms Grid: Strict container-scoped columns */
-#tabletRoomsGrid {
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 14px;
+#desktopView.view-tablet #mainSidebar,
+#desktopView.view-mobile #mainSidebar {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 40;
+  width: 265px;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 14px 0 40px -8px rgba(0, 0, 0, 0.25);
 }
-#tabletFrame.portrait #tabletRoomsGrid {
+
+#desktopView.view-tablet #mainSidebar.drawer-open,
+#desktopView.view-mobile #mainSidebar.drawer-open {
+  transform: translateX(0) !important;
+}
+
+/* Prettier sidebar backdrop overlay */
+#desktopView.view-tablet #sidebarBackdrop,
+#desktopView.view-mobile #sidebarBackdrop {
+  position: absolute !important;
+  z-index: 30;
+}
+
+/* ============================================================== */
+/* MOBILE (414px) — OPTIMIZED LAYOUT                              */
+/* ============================================================== */
+
+/* Content area padding: add top pad so content clears the notch */
+#desktopView.view-mobile #mainScrollArea {
+  padding: 12px !important;
+  padding-top: 10px !important;
+}
+
+/* Subheader: more compact for mobile */
+#desktopView.view-mobile #mainScrollArea .space-y-6 {
+  gap: 12px !important;
+}
+
+/* Subheader bar: tighter on mobile */
+#desktopView.view-mobile main > div:first-child {
+  padding: 8px 10px !important;
+}
+
+/* KPI Cards grid: 2-up on mobile */
+#desktopView.view-mobile #section-dashboard .grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+#desktopView.view-mobile .kpi-card {
+  padding: 12px 10px !important;
+  border-radius: 12px !important;
+}
+
+#desktopView.view-mobile .kpi-card .text-2xl {
+  font-size: 1.3rem !important;
+}
+
+#desktopView.view-mobile .kpi-card > div > div:last-child {
+  width: 40px !important;
+  height: 40px !important;
+  font-size: 16px !important;
+}
+
+/* Charts: Stack vertically on mobile */
+#desktopView.view-mobile #section-dashboard .lg\:grid-cols-3 {
+  grid-template-columns: 1fr !important;
+}
+
+#desktopView.view-mobile #section-dashboard .h-64 {
+  height: 160px !important;
+}
+
+#desktopView.view-mobile #section-dashboard .h-48 {
+  height: 130px !important;
+}
+
+/* Dashboard recent table → scrollable on mobile */
+#desktopView.view-mobile .overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Recent activity table: hide less important columns on mobile */
+#desktopView.view-mobile #tableDashboardRecent tr td:nth-child(3),
+#desktopView.view-mobile #tableDashboardRecent tr td:nth-child(5),
+#desktopView.view-mobile #tableDashboardRecent tr td:nth-child(6),
+#desktopView.view-mobile #tableDashboardRecent tr th:nth-child(3),
+#desktopView.view-mobile #tableDashboardRecent tr th:nth-child(5),
+#desktopView.view-mobile #tableDashboardRecent tr th:nth-child(6) {
+  display: none !important;
+}
+
+/* History table: hide some columns on mobile */
+#desktopView.view-mobile #historyTableBody tr td:nth-child(4),
+#desktopView.view-mobile #historyTableBody tr td:nth-child(5),
+#desktopView.view-mobile #historyTableBody tr td:nth-child(9),
+#desktopView.view-mobile #section-history thead tr th:nth-child(4),
+#desktopView.view-mobile #section-history thead tr th:nth-child(5),
+#desktopView.view-mobile #section-history thead tr th:nth-child(9) {
+  display: none !important;
+}
+
+/* Customers table: hide less important columns on mobile */
+#desktopView.view-mobile #customersTableBody tr td:nth-child(3),
+#desktopView.view-mobile #customersTableBody tr td:nth-child(4),
+#desktopView.view-mobile #customersTableBody tr td:nth-child(6),
+#desktopView.view-mobile #section-customers thead tr th:nth-child(3),
+#desktopView.view-mobile #section-customers thead tr th:nth-child(4),
+#desktopView.view-mobile #section-customers thead tr th:nth-child(6) {
+  display: none !important;
+}
+
+/* Logs table: collapse on mobile */
+#desktopView.view-mobile #logsTableBody tr td:nth-child(3),
+#desktopView.view-mobile #logsTableBody tr td:nth-child(5),
+#desktopView.view-mobile #section-logs thead tr th:nth-child(3),
+#desktopView.view-mobile #section-logs thead tr th:nth-child(5) {
+  display: none !important;
+}
+
+/* Rooms grid: 2 columns on mobile */
+#desktopView.view-mobile #roomsContainer .grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+/* Room card: more compact on mobile */
+#desktopView.view-mobile .room-card-box {
+  padding: 10px !important;
+  border-radius: 12px !important;
+}
+
+#desktopView.view-mobile .room-card-box .text-xl {
+  font-size: 1rem !important;
+}
+
+/* Room filter bar: horizontal scroll on mobile */
+#desktopView.view-mobile #section-rooms > div:first-child {
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  gap: 6px !important;
+  padding: 10px !important;
+}
+
+#desktopView.view-mobile #section-rooms > div:first-child > div:first-child {
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+}
+
+#desktopView.view-mobile #section-rooms > div:first-child > div:last-child {
+  flex-direction: column !important;
+  gap: 6px !important;
+  align-items: stretch !important;
+  flex-shrink: 0;
+}
+
+#desktopView.view-mobile #inputSearchRoom {
+  width: 100% !important;
+}
+
+/* History filter: stack on mobile */
+#desktopView.view-mobile #section-history .grid-cols-1.sm\:grid-cols-2.md\:grid-cols-5 {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 6px !important;
+}
+
+/* Export button text on mobile */
+#desktopView.view-mobile .fa-file-csv + * {
+  display: none;
+}
+
+/* Users section on mobile */
+#desktopView.view-mobile #usersTableBody tr td:nth-child(2),
+#desktopView.view-mobile #usersTableBody tr td:nth-child(3),
+#desktopView.view-mobile #section-users thead tr th:nth-child(2),
+#desktopView.view-mobile #section-users thead tr th:nth-child(3) {
+  display: none !important;
+}
+
+/* User menu: hide text on mobile */
+#desktopView.view-mobile #desktopUserMenuContainer .text-left {
+  display: none !important;
+}
+#desktopView.view-mobile #desktopUserMenuContainer .fa-chevron-down {
+  display: none !important;
+}
+
+/* Action buttons: hide text on mobile, show icon only */
+#desktopView.view-mobile .btn-hide-on-mobile {
+  display: none !important;
+}
+#desktopView.view-mobile .btn-compact-mobile span {
+  display: none !important;
+}
+
+/* Touch-friendly button sizing on mobile */
+#desktopView.view-mobile button,
+#desktopView.view-mobile .nav-link {
+  min-height: 36px;
+}
+
+/* Compact subheader on mobile */
+#desktopView.view-mobile #pageSubheading {
+  display: none !important;
+}
+
+/* Quick action buttons in subheader: tighter */
+#desktopView.view-mobile .bg-gradient-to-r.from-blue-600 {
+  padding: 6px 10px !important;
+}
+
+/* ============================================================== */
+/* TABLET (820px) — OPTIMIZED LAYOUT                              */
+/* ============================================================== */
+
+/* Main scroll area: slightly less padding */
+#desktopView.view-tablet #mainScrollArea {
+  padding: 16px !important;
+}
+
+/* Room grid: 3 columns on tablet */
+#desktopView.view-tablet #roomsContainer .grid {
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 11px;
-}
-#tabletFrame.fullscreen-mode:not(.portrait) #tabletRoomsGrid {
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  gap: 12px !important;
 }
 
-/* Tablet Filter Bar in Portrait */
-#tabletFrame.portrait #tabletRoomsFilterBar {
+/* KPI grid on tablet: 2x2 */
+#desktopView.view-tablet #section-dashboard .grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+/* Charts on tablet: single column */
+#desktopView.view-tablet #section-dashboard .lg\:grid-cols-3 {
+  grid-template-columns: 1fr !important;
+}
+
+/* History filter grid on tablet: 3 cols */
+#desktopView.view-tablet #section-history .md\:grid-cols-5 {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+/* User menu on tablet: hide long text */
+#desktopView.view-tablet #desktopUserMenuContainer .text-left {
+  display: none !important;
+}
+#desktopView.view-tablet #desktopUserMenuContainer .fa-chevron-down {
+  display: none !important;
+}
+
+/* Sidebar Quick Action on tablet: more visible */
+#desktopView.view-tablet #mainSidebar {
+  width: 260px;
+}
+
+/* Room filter bar on tablet: wrap nicely */
+#desktopView.view-tablet #section-rooms > div:first-child {
   flex-direction: column !important;
   align-items: stretch !important;
   gap: 8px !important;
 }
-#tabletFrame.portrait #tabletRoomsFilterBar .tablet-filter-row-1 {
-  width: 100% !important;
-  display: flex !important;
-  justify-content: space-between !important;
+
+#desktopView.view-tablet #section-rooms > div:first-child > div:first-child {
+  flex-wrap: wrap !important;
+}
+
+#desktopView.view-tablet #section-rooms > div:first-child > div:last-child {
+  flex-direction: row !important;
   align-items: center !important;
 }
-#tabletFrame.portrait #tabletRoomsFilterBar .tablet-filter-row-2 {
-  width: 100% !important;
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  gap: 8px !important;
-}
-#tabletFrame.portrait #tabletRoomsFilterBar .tablet-search-wrapper {
-  flex: 1 !important;
-  min-width: 140px !important;
-  max-width: none !important;
+
+#desktopView.view-tablet #inputSearchRoom {
+  width: 200px !important;
 }
 
-/* Tablet In-House Guests Grid */
-#tabletGuestsGrid {
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 14px;
-}
-#tabletFrame.portrait #tabletGuestsGrid {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 12px;
+/* Compact subheader text on tablet */
+#desktopView.view-tablet #pageSubheading {
+  display: none !important;
 }
 
-/* Tablet Stats Tab in Portrait: Stack Charts vertically */
-#tabletFrame.portrait .tablet-stats-charts {
-  grid-template-columns: 1fr !important;
-}
-#tabletFrame.portrait .tablet-stats-charts > div {
-  grid-column: span 1 !important;
+/* Customers search: narrower on tablet */
+#desktopView.view-tablet .relative.w-72 {
+  width: 200px !important;
 }
 
-/* Tablet Settings Tab in Portrait: Stack columns vertically */
-#tabletFrame.portrait .tablet-settings-grid {
-  grid-template-columns: 1fr !important;
+/* ============================================================== */
+/* NATURAL VIEWPORT MEDIA QUERIES (REAL DEVICES)                  */
+/* ============================================================== */
+@media (max-width: 1024px) {
+  #btnToggleSidebar {
+    display: inline-flex !important;
+  }
+  #btnCloseSidebarDrawer {
+    display: inline-flex !important;
+  }
+  #desktopView:not(.view-tablet):not(.view-mobile) #mainSidebar {
+    position: fixed !important;
+    top: 56px;
+    bottom: 0;
+    left: 0;
+    z-index: 40;
+    width: 270px;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 10px 0 25px -5px rgba(0, 0, 0, 0.2);
+  }
+  #desktopView:not(.view-tablet):not(.view-mobile) #mainSidebar.drawer-open {
+    transform: translateX(0) !important;
+  }
 }
 
-/* Tablet Checkin Split View in Portrait: Stack camera on top & form below */
-#tabletFrame.portrait .tablet-checkin-grid {
-  grid-template-columns: 1fr !important;
+/* ============================================================== */
+/* DEVICE FRAME DECORATION: STATUS BAR OVERLAY                    */
+/* ============================================================== */
+
+/* DEVICE FRAME: OVERRIDE pt-14 SO CONTENT FILLS THE FULL FRAME */
+#desktopView.view-mobile,
+#desktopView.view-tablet {
+  padding-top: 0 !important;
 }
 
-.tablet-room-card {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 14px;
-  cursor: pointer;
+/* Mobile status bar (top of screen area): clear the dynamic island notch */
+#desktopView.view-mobile main > div:first-child {
+  padding-top: 42px !important;
+  background: linear-gradient(to bottom, #f0f4f8 0%, #ffffff 60px);
 }
-.tablet-room-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px -5px rgba(0,0,0,0.08);
+
+/* Tablet: slight top clearance for camera dot */
+#desktopView.view-tablet main > div:first-child {
+  padding-top: 14px !important;
 }
-.tablet-room-card.active-selected {
-  outline: 3px solid #2563eb;
-  outline-offset: 1px;
+
+/* ---- Bottom safe-area hint on mobile ---- */
+#desktopView.view-mobile #mainScrollArea {
+  padding-bottom: 20px !important;
+}
+
+/* ---- Smooth scroll inside the device frames ---- */
+#desktopView.view-mobile #mainScrollArea,
+#desktopView.view-tablet #mainScrollArea {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* ---- Hide horizontal scrollbar on table overflow in device frames ---- */
+#desktopView.view-mobile .overflow-x-auto::-webkit-scrollbar,
+#desktopView.view-tablet .overflow-x-auto::-webkit-scrollbar {
+  height: 3px;
+}
+
+/* ---- Sidebar backdrop: absolute within device frame ---- */
+#desktopView.view-tablet #sidebarBackdrop,
+#desktopView.view-mobile #sidebarBackdrop {
+  position: absolute !important;
+  inset: 0;
+}
+
+/* ---- Room card: mobile font tweaks ---- */
+#desktopView.view-mobile .room-card-box .badge {
+  font-size: 9.5px !important;
+  padding: 2px 6px !important;
+}
+
+/* ---- KPI card number: scale down on mobile ---- */
+#desktopView.view-mobile .kpi-card p.text-2xl {
+  font-size: 1.25rem !important;
+}
+
+/* ---- Better spacing for section cards on mobile ---- */
+#desktopView.view-mobile .space-y-4 {
+  gap: 10px !important;
+}
+
+#desktopView.view-mobile .space-y-6 {
+  gap: 12px !important;
+}
+
+/* ---- Wrapper background: dark device surround ---- */
+.view-wrapper-device {
+  background: radial-gradient(ellipse at 50% 30%, #1e293b 0%, #0f172a 100%);
 }
 </style>
 </head>
@@ -406,19 +739,19 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
     </div>
   </div>
 
-  <!-- Mode Switcher (Chuyển đổi thiết bị: Desktop Admin, Tablet POS Quầy, Mobile App) -->
+  <!-- Mode Switcher (Chuyển đổi chế độ Responsive Web: Desktop, Tablet 820px, Mobile 414px) -->
   <div class="flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700/70 shadow-inner md:absolute md:left-1/2 md:-translate-x-1/2">
-    <button id="btnSwitchDesktop" onclick="switchViewMode('desktop')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-blue-600 text-white shadow-sm">
+    <button id="btnSwitchDesktop" onclick="switchViewMode('desktop')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-blue-600 text-white shadow-sm" title="Giao diện Web Desktop toàn màn hình">
       <i class="fa-solid fa-desktop"></i>
-      <span class="hidden sm:inline">Admin Web</span>
+      <span>Desktop</span>
     </button>
-    <button id="btnSwitchTablet" onclick="switchViewMode('tablet')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all">
+    <button id="btnSwitchTablet" onclick="switchViewMode('tablet')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all" title="Giao diện Web Responsive cho Tablet (820px)">
       <i class="fa-solid fa-tablet-screen-button text-sm"></i>
-      <span>Tablet</span>
+      <span>Tablet (820px)</span>
     </button>
-    <button id="btnSwitchMobile" onclick="switchViewMode('mobile')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all">
+    <button id="btnSwitchMobile" onclick="switchViewMode('mobile')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all" title="Giao diện Web Responsive cho Mobile (414px)">
       <i class="fa-solid fa-mobile-screen"></i>
-      <span class="hidden sm:inline">Mobile App</span>
+      <span>Mobile (414px)</span>
     </button>
   </div>
 </header>
@@ -494,98 +827,114 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
 </div>
 
 <!-- ============================================================== -->
-<!-- 1. DESKTOP ADMIN VIEW -->
+<!-- 1. MAIN WEB APPLICATION (RESPONSIVE: DESKTOP / TABLET / MOBILE) -->
 <!-- ============================================================== -->
-<div id="desktopView" class="pt-14 flex h-screen overflow-hidden">
-  
-  <!-- SIDEBAR NAVIGATION -->
-  <aside id="mainSidebar" class="w-64 bg-white border-r border-slate-200/80 flex flex-col flex-shrink-0 transition-all duration-300 select-none shadow-sm z-20">
-    <div class="p-4 border-b border-slate-100 flex items-center justify-between">
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
-          <i class="fa-solid fa-hotel"></i>
-        </div>
-        <div>
-          <h2 class="text-xs font-bold text-slate-800">Nhà Nghỉ Phúc Sơn</h2>
-          <p class="text-[10px] text-slate-400">20 Phòng · Quản lý lưu trú</p>
-        </div>
-      </div>
-      <span class="w-2 h-2 rounded-full bg-emerald-500" title="Hệ thống Online"></span>
-    </div>
-
-    <div class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-      <div class="px-3 pb-2 text-[10.5px] font-bold uppercase tracking-wider text-slate-400">Nghiệp vụ lưu trú</div>
-      
-      <div class="nav-link active" onclick="navigatePage('dashboard', this)">
-        <i class="fa-solid fa-chart-pie text-base w-5 text-center"></i>
-        <span>Tổng quan (Dashboard)</span>
-      </div>
-
-      <div class="nav-link" onclick="navigatePage('rooms', this)">
-        <i class="fa-solid fa-door-open text-base w-5 text-center"></i>
-        <div class="flex-1 flex items-center justify-between">
-          <span>Sơ đồ phòng</span>
-          <span id="badgeOccupiedCount" class="text-[11px] font-bold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">10</span>
-        </div>
-      </div>
-
-      <div class="nav-link" onclick="navigatePage('history', this)">
-        <i class="fa-solid fa-clock-rotate-left text-base w-5 text-center"></i>
-        <span>Lịch sử Lưu trú</span>
-      </div>
-
-      <div class="nav-link" onclick="navigatePage('customers', this)">
-        <i class="fa-solid fa-address-book text-base w-5 text-center"></i>
-        <span>Danh bạ Khách hàng</span>
-      </div>
-
-      <div class="px-3 pt-5 pb-2 text-[10.5px] font-bold uppercase tracking-wider text-slate-400">Hệ thống & Nhân sự</div>
-
-      <div class="nav-link" onclick="navigatePage('users', this)">
-        <i class="fa-solid fa-users-gear text-base w-5 text-center"></i>
-        <span>Nhân viên & Phân quyền</span>
-      </div>
-
-      <div class="nav-link" onclick="navigatePage('logs', this)">
-        <i class="fa-solid fa-shield-cat text-base w-5 text-center"></i>
-        <span>Nhật ký Hệ thống (Logs)</span>
-      </div>
-    </div>
-
-    <!-- Quick Action in Sidebar -->
-    <div class="p-3 border-t border-slate-100 bg-slate-50/50">
-      <button onclick="openCheckinModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-2.5 px-3 font-semibold text-xs flex items-center justify-center gap-2 shadow-sm shadow-blue-500/30 transition-all">
-        <i class="fa-solid fa-qrcode text-sm"></i>
-        <span>Quét QR Nhận Phòng</span>
-      </button>
-    </div>
-  </aside>
-
-  <!-- MAIN WORKSPACE -->
-  <main class="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-hidden">
+<div id="webAppWrapper" class="w-full bg-slate-50 transition-all duration-300">
+  <div id="desktopView" class="pt-14 flex h-screen overflow-hidden view-desktop">
     
-    <!-- SUBHEADER / CONTEXT ACTIONS -->
-    <div class="bg-white border-b border-slate-200/80 px-6 py-3 flex items-center justify-between flex-shrink-0">
-      <div>
-        <h1 id="pageHeading" class="text-lg font-bold text-slate-800 tracking-tight">Tổng quan hoạt động hôm nay</h1>
-        <p id="pageSubheading" class="text-xs text-slate-500 mt-0.5">Thống kê tỷ lệ lấp đầy, khách ra vào và tình trạng phòng</p>
+    <!-- BACKDROP OVERLAY FOR SIDEBAR ON TABLET & MOBILE -->
+    <div id="sidebarBackdrop" onclick="toggleSidebarDrawer(false)" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 transition-opacity duration-300"></div>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside id="mainSidebar" class="w-64 bg-white border-r border-slate-200/80 flex flex-col flex-shrink-0 transition-all duration-300 select-none shadow-sm z-20">
+      <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-hotel"></i>
+          </div>
+          <div>
+            <h2 class="text-xs font-bold text-slate-800">Nhà Nghỉ Phúc Sơn</h2>
+            <p class="text-[10px] text-slate-400">20 Phòng · Quản lý lưu trú</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500" title="Hệ thống Online"></span>
+          <button id="btnCloseSidebarDrawer" onclick="toggleSidebarDrawer(false)" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 hidden" title="Đóng menu">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
       </div>
 
-      <div class="flex items-center gap-3">
-        <!-- Direct QR Test Scanner Button -->
-        <button onclick="openCheckinModal()" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm shadow-blue-500/25 transition-all">
-          <i class="fa-solid fa-camera"></i>
-          <span>Quét CCCD (Camera / Barcode)</span>
-        </button>
+      <div class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+        <div class="px-3 pb-2 text-[10.5px] font-bold uppercase tracking-wider text-slate-400">Nghiệp vụ lưu trú</div>
+        
+        <div class="nav-link active" onclick="navigatePage('dashboard', this)">
+          <i class="fa-solid fa-chart-pie text-base w-5 text-center"></i>
+          <span>Tổng quan (Dashboard)</span>
+        </div>
 
-        <!-- Fast Scan Simulator Menu -->
-        <button onclick="simulateFastScanSample()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-2 border border-slate-300/80 transition-all">
-          <i class="fa-solid fa-bolt text-amber-500"></i>
-          <span>Thử quét CCCD mẫu</span>
-        </button>
+        <div class="nav-link" onclick="navigatePage('rooms', this)">
+          <i class="fa-solid fa-door-open text-base w-5 text-center"></i>
+          <div class="flex-1 flex items-center justify-between">
+            <span>Sơ đồ phòng</span>
+            <span id="badgeOccupiedCount" class="text-[11px] font-bold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">10</span>
+          </div>
+        </div>
 
-        <!-- Vertical Divider -->
-        <div class="h-7 w-[1px] bg-slate-200 mx-0.5"></div>
+        <div class="nav-link" onclick="navigatePage('history', this)">
+          <i class="fa-solid fa-clock-rotate-left text-base w-5 text-center"></i>
+          <span>Lịch sử Lưu trú</span>
+        </div>
+
+        <div class="nav-link" onclick="navigatePage('customers', this)">
+          <i class="fa-solid fa-address-book text-base w-5 text-center"></i>
+          <span>Danh bạ Khách hàng</span>
+        </div>
+
+        <div class="px-3 pt-5 pb-2 text-[10.5px] font-bold uppercase tracking-wider text-slate-400">Hệ thống & Nhân sự</div>
+
+        <div class="nav-link" onclick="navigatePage('users', this)">
+          <i class="fa-solid fa-users-gear text-base w-5 text-center"></i>
+          <span>Nhân viên & Phân quyền</span>
+        </div>
+
+        <div class="nav-link" onclick="navigatePage('logs', this)">
+          <i class="fa-solid fa-shield-cat text-base w-5 text-center"></i>
+          <span>Nhật ký Hệ thống (Logs)</span>
+        </div>
+      </div>
+
+      <!-- Quick Action in Sidebar -->
+      <div class="p-3 border-t border-slate-100 bg-slate-50/50">
+        <button onclick="openCheckinModal(); toggleSidebarDrawer(false);" class="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-2.5 px-3 font-semibold text-xs flex items-center justify-center gap-2 shadow-sm shadow-blue-500/30 transition-all">
+          <i class="fa-solid fa-qrcode text-sm"></i>
+          <span>Quét QR Nhận Phòng</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-hidden">
+      
+      <!-- SUBHEADER / CONTEXT ACTIONS -->
+      <div class="bg-white border-b border-slate-200/80 px-4 sm:px-6 py-3 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <!-- HAMBURGER MENU BUTTON FOR RESPONSIVE (TABLET & MOBILE) -->
+          <button id="btnToggleSidebar" onclick="toggleSidebarDrawer()" class="p-2 -ml-1 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition-colors hidden" title="Mở menu điều hướng">
+            <i class="fa-solid fa-bars text-base"></i>
+          </button>
+          
+          <div class="min-w-0">
+            <h1 id="pageHeading" class="text-sm sm:text-lg font-bold text-slate-800 tracking-tight truncate">Tổng quan hoạt động hôm nay</h1>
+            <p id="pageSubheading" class="text-[10px] sm:text-xs text-slate-500 mt-0.5 truncate hidden sm:block">Thống kê tỷ lệ lấp đầy, khách ra vào và tình trạng phòng</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          <!-- Direct QR Test Scanner Button -->
+          <button onclick="openCheckinModal()" class="btn-compact-mobile bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 sm:gap-2 shadow-sm shadow-blue-500/25 transition-all">
+            <i class="fa-solid fa-camera"></i>
+            <span>Quét CCCD</span>
+          </button>
+
+          <!-- Fast Scan Simulator Menu -->
+          <button onclick="simulateFastScanSample()" class="btn-hide-on-mobile bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-2 border border-slate-300/80 transition-all">
+            <i class="fa-solid fa-bolt text-amber-500"></i>
+            <span>Quét mẫu</span>
+          </button>
+
+          <!-- Vertical Divider -->
+          <div class="h-6 w-[1px] bg-slate-200 mx-0.5 btn-hide-on-mobile"></div>
 
         <!-- USER PROFILE & ACTIONS (GÓC TRÊN BÊN PHẢI MÀN HÌNH DESKTOP) -->
         <div class="relative" id="desktopUserMenuContainer">
@@ -1020,1243 +1369,11 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
   </main>
 </div>
 
-<!-- ============================================================== -->
-<!-- 2. MOBILE APP VIEW (LỄ TÂN & BUỒNG PHÒNG DI ĐỘNG) -->
-<!-- ============================================================== -->
-<div id="mobileViewWrapper" class="hidden pt-16 pb-12 min-h-screen bg-slate-900 flex items-center justify-center p-4">
-  
-  <div id="phoneFrame">
-    <!-- Dynamic Island / Notch -->
-    <div class="phone-island">
-      <div class="w-2.5 h-2.5 rounded-full bg-slate-800"></div>
-      <div class="w-3 h-3 rounded-full bg-slate-900 border border-slate-800"></div>
-    </div>
-
-    <!-- Phone Screen Content -->
-    <div class="flex-1 flex flex-col bg-slate-100 overflow-hidden relative" style="border-radius: 46px;">
-      
-      <!-- Mobile Top Bar (Solid Primary Color) -->
-      <div class="bg-blue-700 text-white pt-12 pb-4 px-4 flex-shrink-0 shadow-md border-b border-blue-800">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center font-bold text-sm">
-              <i class="fa-solid fa-hotel text-white"></i>
-            </div>
-            <div>
-              <div class="text-[11px] text-blue-200">Lễ tân Ca sáng</div>
-              <div class="font-bold text-sm leading-tight">Nhà Nghỉ Phúc Sơn</div>
-            </div>
-          </div>
-          <button onclick="mobileTriggerScanner()" class="w-9 h-9 rounded-xl bg-white text-blue-700 flex items-center justify-center text-sm shadow-md active:scale-95 transition-transform" title="Quét CCCD">
-            <i class="fa-solid fa-qrcode"></i>
-          </button>
-        </div>
-
-        <!-- Quick Stats Pill in Mobile Header -->
-        <div class="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
-          <div class="bg-white/15 rounded-xl py-1.5 px-1 backdrop-blur-sm">
-            <span class="block font-extrabold text-sm text-emerald-300" id="mobStatVacant">8</span>
-            <span class="text-[10px] text-blue-100">Trống sạch</span>
-          </div>
-          <div class="bg-white/15 rounded-xl py-1.5 px-1 backdrop-blur-sm">
-            <span class="block font-extrabold text-sm text-amber-300" id="mobStatOccupied">10</span>
-            <span class="text-[10px] text-blue-100">Đang ở</span>
-          </div>
-          <div class="bg-white/15 rounded-xl py-1.5 px-1 backdrop-blur-sm">
-            <span class="block font-extrabold text-sm text-purple-300" id="mobStatCleaning">2</span>
-            <span class="text-[10px] text-blue-100">Chờ dọn</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Mobile Scrollable Body -->
-      <div class="flex-1 overflow-y-auto p-3 space-y-3" id="mobileScreenContainer">
-        
-        <!-- ROOMS TAB (DEFAULT) -->
-        <div id="mobTabRooms" class="space-y-3">
-          <div class="flex items-center justify-between text-xs px-1">
-            <span class="font-bold text-slate-700 uppercase tracking-wide text-[11px]">Danh sách phòng</span>
-            <span class="text-slate-400 text-[10px]">Chạm vào để xử lý</span>
-          </div>
-
-          <div id="mobRoomsGrid" class="grid grid-cols-2 gap-2.5">
-            <!-- Dynamically Rendered -->
-          </div>
-        </div>
-
-        <!-- TAB 2: LỊCH SỬ LƯU TRÚ (STAY HISTORY) -->
-        <div id="mobTabGuests" class="hidden space-y-2.5">
-          <!-- Filter & Search Sub-header -->
-          <div class="bg-white p-3 rounded-2xl border border-slate-200/90 shadow-xs space-y-2">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-1.5 font-bold text-xs text-slate-800">
-                <i class="fa-solid fa-clock-rotate-left text-blue-600"></i>
-                <span>Lịch sử lưu trú</span>
-              </div>
-              <span id="mobHistoryTotalBadge" class="text-[10px] font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-200">16 lượt</span>
-            </div>
-
-            <!-- Search box -->
-            <div class="relative">
-              <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-              <input type="text" id="mobHistorySearchInput" oninput="handleMobileHistorySearch(this.value)" placeholder="Tìm tên khách, CCCD, số phòng..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
-            </div>
-
-            <!-- Filter Controls: Status Pills & Room select -->
-            <div class="flex items-center justify-between gap-1.5 text-xs pt-0.5">
-              <div class="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-[11px]">
-                <button onclick="filterMobileHistoryStatus('all')" id="mobHistStatusAll" class="mob-hist-status-btn px-2 py-1 rounded-lg font-bold bg-white text-slate-800 shadow-xs">Tất cả</button>
-                <button onclick="filterMobileHistoryStatus('staying')" id="mobHistStatusStaying" class="mob-hist-status-btn px-2 py-1 rounded-lg font-semibold text-slate-500 hover:text-amber-700">Đang ở</button>
-                <button onclick="filterMobileHistoryStatus('checked_out')" id="mobHistStatusOut" class="mob-hist-status-btn px-2 py-1 rounded-lg font-semibold text-slate-500 hover:text-emerald-700">Đã trả</button>
-              </div>
-
-              <select id="mobFilterHistoryRoom" onchange="handleMobileHistoryRoomFilter(this.value)" class="text-[11px] bg-slate-50 border border-slate-200 rounded-xl px-2 py-1 text-slate-700 focus:outline-none focus:border-blue-500 max-w-[120px]">
-                <option value="">Tất cả phòng</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- History Records List -->
-          <div id="mobGuestsList" class="space-y-2 pb-2">
-            <!-- Dynamically Rendered by renderMobileHistory() -->
-          </div>
-        </div>
-
-        <!-- STATS TAB -->
-        <div id="mobTabStats" class="hidden space-y-3">
-          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm text-center">
-            <span class="text-xs text-slate-400">Khách đang lưu trú</span>
-            <div class="text-2xl font-extrabold text-blue-600 mt-1" id="mobGuestCountToday">16 khách</div>
-          </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-            <h4 class="text-xs font-bold text-slate-700 mb-3">Tỷ lệ sử dụng phòng</h4>
-            <div class="h-40">
-              <canvas id="chartMobileOcc"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <!-- SETTINGS & PROFILE TAB (SCREEN CÀI ĐẶT & HỒ SƠ) -->
-        <div id="mobTabSettings" class="hidden space-y-3 pb-6">
-          <!-- Profile Card -->
-          <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-base shadow-md shadow-blue-600/30">
-                PS
-              </div>
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-2">
-                  <h4 class="font-bold text-sm text-slate-800 truncate" id="mobProfileName">Lễ tân Phúc Sơn</h4>
-                  <span class="text-[9px] bg-emerald-100 text-emerald-700 font-bold px-1.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Online
-                  </span>
-                </div>
-                <div class="text-[11px] text-slate-400 mt-0.5" id="mobProfileRole">Nhân viên Lễ tân ca trực</div>
-                <div class="text-[10px] text-slate-500 font-mono mt-0.5">Cơ sở: Nhà nghỉ Phúc Sơn</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Settings Group 1: Tính năng quét & Thông báo -->
-          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-            <div class="px-3.5 py-2.5 bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-600 uppercase tracking-wide">
-              Cài đặt Quét QR & Thông báo
-            </div>
-            <div class="divide-y divide-slate-100 text-xs">
-              <!-- Toggle Sound -->
-              <div class="p-3 flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xs">
-                    <i class="fa-solid fa-volume-high"></i>
-                  </div>
-                  <div>
-                    <div class="font-semibold text-slate-800">Âm thanh beep khi quét</div>
-                    <div class="text-[10px] text-slate-400">Phát âm thanh khi nhận diện thẻ CCCD</div>
-                  </div>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" id="settingSoundToggle" checked class="sr-only peer" onchange="toggleSettingSound(this)">
-                  <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                </label>
-              </div>
-
-              <!-- Toggle Auto Camera -->
-              <div class="p-3 flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
-                    <i class="fa-solid fa-camera"></i>
-                  </div>
-                  <div>
-                    <div class="font-semibold text-slate-800">Tự bật camera khi check-in</div>
-                    <div class="text-[10px] text-slate-400">Tự động khởi động camera quét</div>
-                  </div>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" id="settingAutoCameraToggle" class="sr-only peer" onchange="toggleSettingAutoCamera(this)">
-                  <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                </label>
-              </div>
-
-              <!-- Toggle Vibration -->
-              <div class="p-3 flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center text-xs">
-                    <i class="fa-solid fa-mobile-screen"></i>
-                  </div>
-                  <div>
-                    <div class="font-semibold text-slate-800">Rung phản hồi (Haptic)</div>
-                    <div class="text-[10px] text-slate-400">Rung nhẹ khi quét thành công</div>
-                  </div>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" id="settingVibrateToggle" checked class="sr-only peer" onchange="toggleSettingVibrate(this)">
-                  <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Settings Group 2: Tài khoản & Hệ thống -->
-          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-            <div class="px-3.5 py-2.5 bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-600 uppercase tracking-wide">
-              Tài khoản & Thiết bị
-            </div>
-            <div class="divide-y divide-slate-100 text-xs">
-              <button onclick="mobileChangePasswordPrompt()" class="w-full p-3 flex items-center justify-between hover:bg-slate-50 text-left active:bg-slate-100 transition-colors">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xs">
-                    <i class="fa-solid fa-key"></i>
-                  </div>
-                  <div>
-                    <div class="font-semibold text-slate-800">Đổi mật khẩu tài khoản</div>
-                    <div class="text-[10px] text-slate-400">Cập nhật mật khẩu đăng nhập</div>
-                  </div>
-                </div>
-                <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
-              </button>
-
-              <div class="p-3 flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center text-xs">
-                    <i class="fa-solid fa-circle-info"></i>
-                  </div>
-                  <div>
-                    <div class="font-semibold text-slate-800">Phiên bản phần mềm</div>
-                    <div class="text-[10px] text-slate-400">Dành riêng cho Nhà nghỉ Phúc Sơn</div>
-                  </div>
-                </div>
-                <span class="text-[11px] font-bold text-blue-700 font-mono bg-blue-50 px-2 py-0.5 rounded-md">v2.5 Pro</span>
-              </div>
-
-              <div class="p-3 flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-7 h-7 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center text-xs">
-                    <i class="fa-solid fa-headset"></i>
-                  </div>
-                  <div>
-                    <div class="font-semibold text-slate-800">Hotline hỗ trợ kỹ thuật</div>
-                    <div class="text-[10px] text-slate-400">Hỗ trợ thiết bị máy quét & QR</div>
-                  </div>
-                </div>
-                <span class="text-[11px] font-bold text-slate-700 font-mono">1900.6868</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Logout Button -->
-          <div class="pt-1">
-            <button onclick="mobileLogout()" class="w-full py-3 bg-red-50 hover:bg-red-100 active:scale-[0.98] text-red-600 font-bold rounded-2xl border border-red-200/80 flex items-center justify-center gap-2 text-xs shadow-sm transition-all">
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-              <span>Đăng xuất tài khoản</span>
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Mobile Bottom Navigation (5 tabs with large center QR button) -->
-      <div class="bg-white border-t border-slate-200 px-2 py-2 flex items-center justify-around text-slate-400 flex-shrink-0 shadow-lg relative">
-        <button onclick="mobileSwitchTab('rooms')" id="mobNavRooms" class="flex flex-col items-center gap-1 text-blue-600 font-semibold text-[10px] w-12 py-1">
-          <i class="fa-solid fa-door-open text-base"></i>
-          <span>Phòng</span>
-        </button>
-        <button onclick="mobileSwitchTab('guests')" id="mobNavGuests" class="flex flex-col items-center gap-1 text-slate-400 text-[10px] w-12 py-1">
-          <i class="fa-solid fa-clock-rotate-left text-base"></i>
-          <span>Lịch sử</span>
-        </button>
-        
-        <!-- PROMINENT CENTER QR SCANNER BUTTON (Chính giữa, to nhất, nổi bật nhất) -->
-        <div class="flex flex-col items-center -mt-7">
-          <button onclick="mobileTriggerScanner()" class="w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center text-2xl shadow-xl shadow-blue-600/40 ring-4 ring-white active:scale-90 transition-transform" title="Quét mã QR CCCD Check-in">
-            <i class="fa-solid fa-qrcode"></i>
-          </button>
-          <span class="text-[9px] font-extrabold text-blue-700 mt-1 uppercase tracking-wider">Quét QR</span>
-        </div>
-
-        <button onclick="mobileSwitchTab('stats')" id="mobNavStats" class="flex flex-col items-center gap-1 text-slate-400 text-[10px] w-12 py-1">
-          <i class="fa-solid fa-chart-pie text-base"></i>
-          <span>Báo cáo</span>
-        </button>
-        <button onclick="mobileSwitchTab('settings')" id="mobNavSettings" class="flex flex-col items-center gap-1 text-slate-400 text-[10px] w-12 py-1">
-          <i class="fa-solid fa-gear text-base"></i>
-          <span>Cài đặt</span>
-        </button>
-      </div>
-
-      <!-- DEDICATED MOBILE CHECK-IN SCREEN (NATIVE APP EXPERIENCE) -->
-      <div id="mobScreenCheckin" class="absolute inset-0 bg-slate-100 z-30 flex flex-col hidden">
-        <!-- Mobile Checkin Header (Solid Primary Color) -->
-        <div class="bg-blue-700 text-white pt-14 pb-3 px-4 shadow-md border-b border-blue-800 flex items-center justify-between flex-shrink-0">
-          <div class="flex items-center gap-2.5">
-            <button onclick="closeMobileCheckin()" class="w-8 h-8 rounded-full bg-white/20 active:scale-90 flex items-center justify-center text-white transition-all" title="Quay lại danh sách phòng">
-              <i class="fa-solid fa-arrow-left text-sm"></i>
-            </button>
-            <div>
-              <div class="font-bold text-sm leading-tight">Check-in Quét QR CCCD</div>
-              <div class="text-[10px] text-blue-200">Nhà nghỉ Phúc Sơn</div>
-            </div>
-          </div>
-          <button onclick="resetMobileCheckinForm()" class="text-[11px] font-semibold text-blue-100 hover:text-white px-2 py-1 rounded-lg bg-white/10 active:scale-95" title="Làm mới">
-            <i class="fa-solid fa-rotate-right mr-1"></i>Làm mới
-          </button>
-        </div>
-
-        <!-- Mobile Checkin Body (Scrollable) -->
-        <div class="flex-1 overflow-y-auto p-3 space-y-3" id="mobCheckinScrollContainer">
-          
-          <!-- Card 1: Chọn phòng & Giá tự nhập -->
-          <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                <i class="fa-solid fa-door-open text-blue-600"></i> Chọn phòng nhận
-              </span>
-              <span class="text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                Trống sạch
-              </span>
-            </div>
-            <div>
-              <select id="mobCheckinRoomSelect" class="w-full text-xs font-bold bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500">
-                <!-- Dynamically populated with vacant rooms -->
-              </select>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2 pt-1.5 border-t border-slate-100">
-              <div>
-                <label class="block text-[10px] font-semibold text-slate-500 mb-1">Hình thức thuê</label>
-                <select id="mobCheckinRentalType" class="w-full text-xs bg-slate-50 border border-slate-300 rounded-xl p-2 text-slate-800 font-medium">
-                  <option value="daily" selected>Theo ngày / đêm</option>
-                  <option value="hourly">Theo giờ</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-[10px] font-semibold text-slate-500 mb-1">Giá phòng tự nhập (VNĐ)</label>
-                <input type="number" id="mobCheckinPrice" placeholder="Ví dụ: 80000 hoặc 250000" class="w-full text-xs font-bold text-blue-600 bg-slate-50 border border-slate-300 rounded-xl p-2 placeholder:font-normal placeholder:text-slate-400">
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 2: Quét mã QR CCCD (Camera & Giả lập máy quét) -->
-          <div class="bg-slate-900 text-white p-3.5 rounded-2xl border border-slate-800 shadow-md space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-slate-100 flex items-center gap-1.5">
-                <i class="fa-solid fa-qrcode text-emerald-400"></i> Quét mã QR Thẻ CCCD
-              </span>
-              <button id="btnMobToggleCamera" onclick="toggleMobileCamera()" class="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1 active:scale-95 transition-all">
-                <i class="fa-solid fa-video"></i> <span>Bật Camera</span>
-              </button>
-            </div>
-
-            <!-- Real Camera Box (Html5Qrcode) -->
-            <div id="mobCameraBox" class="hidden overflow-hidden rounded-xl bg-black border border-slate-700 relative">
-              <div id="mobQrReader" class="w-full h-48 bg-black"></div>
-              <div class="p-1.5 text-center bg-slate-800/90 text-[10px] text-slate-300">
-                Đang mở Camera sau. Hướng vào mã QR góc phải mặt trước/sau thẻ CCCD
-              </div>
-            </div>
-
-            <!-- Simulated Viewfinder Graphics (when camera is idle) -->
-            <div id="mobStandbyViewfinder" class="relative bg-slate-950/70 rounded-xl p-4 border border-dashed border-slate-700 text-center overflow-hidden">
-              <div class="scanner-corner border-t-2 border-l-2 -top-1 -left-1"></div>
-              <div class="scanner-corner border-t-2 border-r-2 -top-1 -right-1"></div>
-              <div class="scanner-corner border-b-2 border-l-2 -bottom-1 -left-1"></div>
-              <div class="scanner-corner border-b-2 border-r-2 -bottom-1 -right-1"></div>
-              
-              <div class="qr-scanner-line"></div>
-
-              <div class="py-3 flex flex-col items-center justify-center">
-                <i class="fa-solid fa-id-card-clip text-3xl text-blue-400/80 mb-2"></i>
-                <span class="text-[11px] font-medium text-slate-300">Hướng camera vào mã QR thẻ CCCD</span>
-                <span class="text-[9px] text-slate-400 mt-0.5">Tự động điền Họ tên, Số CCCD, Ngày sinh, Quê quán</span>
-              </div>
-            </div>
-
-            <!-- Action: Pick Photo from Device -->
-            <label class="w-full py-2 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 text-xs font-medium rounded-xl flex items-center justify-center gap-1.5 cursor-pointer border border-slate-700 transition-all">
-              <i class="fa-solid fa-image text-blue-400"></i>
-              <span>Chọn ảnh chụp QR CCCD từ thiết bị</span>
-              <input type="file" id="mobQrFileInput" accept="image/*" class="hidden" onchange="handleMobImageScan(this)">
-            </label>
-
-            <!-- Simulation quick scan chips -->
-            <div class="pt-2 border-t border-slate-800/80">
-              <div class="text-[10px] text-slate-400 mb-1.5 font-medium flex items-center justify-between">
-                <span>⚡ Quét mẫu thử nghiệm nhanh:</span>
-              </div>
-              <div class="grid grid-cols-1 gap-1.5">
-                <button onclick="applyMobSampleCccd(0)" class="text-[11px] bg-slate-800/90 hover:bg-slate-700 text-blue-300 hover:text-white px-2.5 py-1.5 rounded-lg border border-slate-700 text-left flex items-center justify-between active:scale-95 transition-all">
-                  <span><i class="fa-solid fa-user mr-1.5 text-blue-400"></i>Nguyễn Văn An</span>
-                  <span class="text-[9px] text-slate-400 font-mono">001095012345 (Nam)</span>
-                </button>
-                <button onclick="applyMobSampleCccd(1)" class="text-[11px] bg-slate-800/90 hover:bg-slate-700 text-purple-300 hover:text-white px-2.5 py-1.5 rounded-lg border border-slate-700 text-left flex items-center justify-between active:scale-95 transition-all">
-                  <span><i class="fa-solid fa-user mr-1.5 text-purple-400"></i>Trần Thị Bích</span>
-                  <span class="text-[9px] text-slate-400 font-mono">038198009876 (Nữ)</span>
-                </button>
-                <button onclick="applyMobSampleCccd(2)" class="text-[11px] bg-slate-800/90 hover:bg-slate-700 text-emerald-300 hover:text-white px-2.5 py-1.5 rounded-lg border border-slate-700 text-left flex items-center justify-between active:scale-95 transition-all">
-                  <span><i class="fa-solid fa-user mr-1.5 text-emerald-400"></i>Lê Quốc Huy</span>
-                  <span class="text-[9px] text-slate-400 font-mono">079092004567 (Nam)</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Raw QR text input option -->
-            <div class="flex gap-1.5 pt-1">
-              <input type="text" id="mobRawQrInput" placeholder="Hoặc dán chuỗi QR CCCD..." onkeydown="if(event.key==='Enter')parseMobRawInput()" class="flex-1 text-[11px] bg-slate-800 text-white border border-slate-700 rounded-lg px-2.5 py-1.5 placeholder:text-slate-500 focus:outline-none focus:border-blue-500 font-mono">
-              <button onclick="parseMobRawInput()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold rounded-lg active:scale-95">Đọc</button>
-            </div>
-          </div>
-
-          <!-- Card 3: Danh sách khách lưu trú đã quét -->
-          <div class="space-y-2">
-            <div class="flex items-center justify-between px-1">
-              <span class="text-xs font-bold text-slate-800 flex items-center gap-1">
-                Khách lưu trú (<span id="mobGuestCountBadge" class="text-blue-600 font-extrabold">0</span>)
-              </span>
-              <span class="text-[10px] text-slate-400">Có thể quét nhiều người cùng phòng</span>
-            </div>
-
-            <div id="mobCheckinGuestsList" class="space-y-2">
-              <!-- Rendered dynamically -->
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Mobile Checkin Fixed Bottom Actions -->
-        <div class="p-3 bg-white border-t border-slate-200 shadow-xl flex gap-2 flex-shrink-0">
-          <button onclick="closeMobileCheckin()" class="w-1/3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl active:scale-95 transition-all">
-            Huỷ bỏ
-          </button>
-          <button onclick="submitMobileCheckin()" class="w-2/3 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 text-white text-xs font-bold rounded-xl shadow-lg shadow-blue-500/25 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-            <i class="fa-solid fa-check"></i> Xác nhận Nhận phòng
-          </button>
-        </div>
-      </div>
-
-      <!-- DEDICATED MOBILE LOGIN SCREEN (NATIVE APP EXPERIENCE) -->
-      <div id="mobScreenLogin" class="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-white z-40 flex flex-col justify-between p-5 pt-14 pb-8 overflow-y-auto hidden select-none">
-        
-        <!-- Top Brand Section -->
-        <div>
-          <div class="flex flex-col items-center text-center mt-2 mb-5">
-            <div class="w-16 h-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-xl shadow-blue-500/30 border-2 border-white/20 mb-2.5">
-              PS
-            </div>
-            <h3 class="text-lg font-black tracking-tight text-white leading-tight">Nhà Nghỉ Phúc Sơn</h3>
-            <p class="text-[11px] text-blue-200 mt-0.5">Ứng Dụng Di Động Lễ Tân & Buồng Phòng</p>
-            <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-[10px] text-blue-100">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Phiên bản v2.5 Pro</span>
-            </div>
-          </div>
-
-          <!-- Mobile Login Form Card -->
-          <div class="bg-white/10 backdrop-blur-md p-4 rounded-3xl border border-white/10 shadow-xl space-y-3">
-            <div class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5 border-b border-white/10 pb-2">
-              <i class="fa-solid fa-lock text-blue-400"></i>
-              <span>Đăng nhập ca trực</span>
-            </div>
-
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Tài khoản</label>
-              <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
-                  <i class="fa-solid fa-user"></i>
-                </div>
-                <input type="text" id="mobLoginUsername" value="letan.lananh" placeholder="Nhập tên đăng nhập..." class="w-full bg-slate-800/90 border border-slate-700 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Mật khẩu</label>
-              <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
-                  <i class="fa-solid fa-key"></i>
-                </div>
-                <input type="password" id="mobLoginPassword" value="123" placeholder="Nhập mật khẩu..." class="w-full bg-slate-800/90 border border-slate-700 rounded-xl pl-8 pr-8 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
-                <button type="button" onclick="togglePasswordVisibility('mobLoginPassword', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-200 text-xs">
-                  <i class="fa-solid fa-eye"></i>
-                </button>
-              </div>
-            </div>
-
-            <button onclick="handleMobileLoginSubmit(event)" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold rounded-xl text-xs shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition-all mt-1">
-              <i class="fa-solid fa-arrow-right-to-bracket"></i>
-              <span>Vào ca làm việc</span>
-            </button>
-          </div>
-
-          <!-- Quick 1-tap Accounts for Mobile -->
-          <div class="mt-3.5 p-3 bg-white/5 rounded-2xl border border-white/5 space-y-1.5">
-            <div class="text-[10px] font-semibold text-slate-400 flex items-center justify-between mb-1">
-              <span>⚡ Chọn nhanh nhân viên ca trực:</span>
-              <span class="text-[9px] text-blue-400">1-chạm</span>
-            </div>
-            <div class="space-y-1.5">
-              <button onclick="fillMobileLogin('letan.lananh', '123')" class="w-full p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 flex items-center justify-between text-left active:scale-95 transition-all">
-                <div class="flex items-center gap-2">
-                  <div class="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[10px]">TL</div>
-                  <span class="text-xs font-bold text-white">Trần Thị Lan Anh</span>
-                </div>
-                <span class="text-[10px] text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-md font-semibold">Lễ tân</span>
-              <button onclick="fillMobileLogin('bp.hoa', '123')" class="w-full p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 flex items-center justify-between text-left active:scale-95 transition-all">
-                <div class="flex items-center gap-2">
-                  <div class="w-6 h-6 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center text-[10px]">BH</div>
-                  <span class="text-xs font-bold text-white">Nguyễn Thị Hoa</span>
-                </div>
-                <span class="text-[10px] text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-md font-semibold">Buồng phòng</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mobile Login Footer -->
-        <div class="text-center text-[10px] text-slate-500 pt-3 border-t border-slate-800">
-          <div>Nhà Nghỉ Phúc Sơn · Lễ tân & Buồng phòng</div>
-          <div class="text-slate-600 mt-0.5">Hotline kỹ thuật: 1900.6868</div>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-
 </div>
 
 <!-- ============================================================== -->
-<!-- 2.5 TABLET APP VIEW (PHIÊN BẢN RESPONSIVE CỦA DI ĐỘNG) -->
+<!-- 2. GIAO DIEN TABLET & MOBILE DA HOP NHAT TRONG RESPONSIVE WEB O TREN -->
 <!-- ============================================================== -->
-<div id="tabletViewWrapper" class="hidden pt-14 pb-6 min-h-screen bg-slate-900 flex flex-col items-center justify-start p-3 select-none">
-  
-  <!-- Tablet Control Toolbar (Top Controls) -->
-  <div class="w-full max-w-[1080px] mb-3 flex flex-wrap items-center justify-between gap-2.5 px-2 text-white">
-    <div class="flex items-center gap-2.5">
-      <div class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
-      <div class="flex items-center gap-2 text-xs">
-        <span class="font-bold text-slate-100 flex items-center gap-1.5">
-          <i class="fa-solid fa-tablet-screen-button text-blue-400"></i>
-          <span>Tablet Lễ Tân (Responsive Mobile)</span>
-        </span>
-        <span class="text-slate-600 hidden sm:inline">|</span>
-        <span class="text-slate-400 text-[11px] hidden sm:inline">Bản mở rộng giao diện di động trên màn hình máy tính bảng</span>
-      </div>
-    </div>
-
-    <!-- Quick Tool Buttons -->
-    <div class="flex items-center gap-2">
-      <button id="btnTabletRotate" onclick="toggleTabletOrientation()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700/80 text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
-        <i class="fa-solid fa-rotate text-blue-400"></i>
-        <span id="tabletRotateLabel">Xoay Dọc</span>
-      </button>
-
-      <button id="btnTabletFullscreen" onclick="toggleTabletFullscreen()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700/80 text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
-        <i class="fa-solid fa-expand text-indigo-400"></i>
-        <span id="tabletFullscreenLabel">Toàn Màn Hình</span>
-      </button>
-
-      <button onclick="tabletQuickSampleScanModal()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white flex items-center gap-1.5 shadow-sm shadow-blue-500/30 active:scale-95 transition-all">
-        <i class="fa-solid fa-bolt text-amber-300"></i>
-        <span>Quét mẫu 1-chạm</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Physical iPad Frame -->
-  <div id="tabletFrame">
-    <!-- Ambient Camera Dot -->
-    <div class="tablet-camera-dot"></div>
-
-    <!-- Tablet Inner Screen Area -->
-    <div class="flex-1 flex flex-col bg-slate-100 overflow-hidden relative" style="border-radius: 34px;">
-      
-      <!-- Tablet Top App Bar (Solid Primary Blue matching Mobile: bg-blue-700 text-white) -->
-      <div class="bg-blue-700 text-white pt-4 pb-3 px-5 flex-shrink-0 shadow-md border-b border-blue-800">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center font-bold text-lg shadow-sm">
-              <i class="fa-solid fa-hotel text-white"></i>
-            </div>
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-base text-white tracking-tight">Nhà Nghỉ Phúc Sơn</span>
-              </div>
-              <div class="text-[11px] text-blue-100 flex items-center gap-2 mt-0.5">
-                <span>Lễ tân: <b class="text-white" id="tabletHeaderUserName">Trần Thị Lan Anh</b> (Ca sáng)</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Live Clock & Quick Scan -->
-          <div class="flex items-center gap-3">
-            <div class="hidden md:flex items-center gap-2 bg-blue-800/80 px-3 py-1.5 rounded-xl border border-blue-600/60 text-xs font-mono font-bold text-blue-200">
-              <i class="fa-regular fa-clock text-blue-300 text-[11px]"></i>
-              <span id="tabletLiveClock">--:--:--</span>
-            </div>
-
-            <button onclick="openTabletCheckinScreen()" class="px-3.5 py-1.5 bg-white text-blue-700 hover:bg-blue-50 font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-md active:scale-95 transition-transform" title="Quét CCCD Check-in">
-              <i class="fa-solid fa-qrcode text-sm"></i>
-              <span class="hidden sm:inline">Quét QR CCCD</span>
-            </button>
-
-            <button onclick="openModal('modalConfirmLogout')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition-colors" title="Đăng xuất">
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Quick Stats Pill (Expanded Responsive Mobile Header Pills) -->
-        <div class="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
-          <div class="bg-white/15 rounded-xl py-2 px-1.5 backdrop-blur-sm flex items-center justify-center gap-1.5 sm:gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 flex-shrink-0"></span>
-            <span class="font-black text-base sm:text-lg text-emerald-300" id="tabletStatVacant">8</span>
-            <span class="text-[11px] sm:text-xs text-blue-100 font-medium whitespace-nowrap">Trống Sạch</span>
-          </div>
-          <div class="bg-white/15 rounded-xl py-2 px-1.5 backdrop-blur-sm flex items-center justify-center gap-1.5 sm:gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 flex-shrink-0"></span>
-            <span class="font-black text-base sm:text-lg text-amber-300" id="tabletStatOccupied">10</span>
-            <span class="text-[11px] sm:text-xs text-blue-100 font-medium whitespace-nowrap">Đang Có Khách</span>
-          </div>
-          <div class="bg-white/15 rounded-xl py-2 px-1.5 backdrop-blur-sm flex items-center justify-center gap-1.5 sm:gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-purple-400 flex-shrink-0"></span>
-            <span class="font-black text-base sm:text-lg text-purple-300" id="tabletStatCleaning">2</span>
-            <span class="text-[11px] sm:text-xs text-blue-100 font-medium whitespace-nowrap">Chờ Dọn Dẹp</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tablet Main Content Area (4 Tabs matching Mobile) -->
-      <div id="tabletScreenContainer" class="flex-1 overflow-y-auto p-4 space-y-4">
-        
-        <!-- ================= TAB 1: SƠ ĐỒ PHÒNG (ROOMS) ================= -->
-        <div id="tabletTabRooms" class="space-y-3.5">
-          <!-- Filter & Search Sub-header -->
-          <div id="tabletRoomsFilterBar" class="bg-white p-3 rounded-2xl border border-slate-200/90 shadow-xs flex flex-wrap items-center justify-between gap-2.5">
-            <!-- Row 1: Floor Pills & Add Room Button -->
-            <div class="tablet-filter-row-1 flex items-center justify-between w-full lg:w-auto gap-2">
-              <div class="flex items-center gap-1.5 overflow-x-auto py-0.5">
-                <button onclick="filterTabletFloor('all')" id="tabFloorAll" class="tablet-floor-btn active px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white transition-all shadow-xs">
-                  Tất cả (20)
-                </button>
-                <button onclick="filterTabletFloor(1)" id="tabFloor1" class="tablet-floor-btn px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
-                  Tầng 1
-                </button>
-                <button onclick="filterTabletFloor(2)" id="tabFloor2" class="tablet-floor-btn px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
-                  Tầng 2
-                </button>
-                <button onclick="filterTabletFloor(3)" id="tabFloor3" class="tablet-floor-btn px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
-                  Tầng 3
-                </button>
-                <button onclick="filterTabletFloor(4)" id="tabFloor4" class="tablet-floor-btn px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
-                  Tầng 4
-                </button>
-              </div>
-
-              <button onclick="openModalAddRoom()" class="tablet-btn-add-room px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all whitespace-nowrap">
-                <i class="fa-solid fa-plus text-xs"></i>
-                <span>Thêm phòng</span>
-              </button>
-            </div>
-
-            <!-- Row 2: Status Filter & Search -->
-            <div class="tablet-filter-row-2 flex items-center gap-2 w-full lg:w-auto justify-between">
-              <div class="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-xs flex-shrink-0">
-                <button onclick="filterTabletStatus('all')" id="tabStatusAll" class="tablet-status-btn px-2.5 py-1 rounded-lg font-bold bg-white text-slate-800 shadow-xs">Tất cả</button>
-                <button onclick="filterTabletStatus('vacant')" id="tabStatusVacant" class="tablet-status-btn px-2.5 py-1 rounded-lg font-semibold text-slate-500 hover:text-emerald-700">Trống</button>
-                <button onclick="filterTabletStatus('occupied')" id="tabStatusOccupied" class="tablet-status-btn px-2.5 py-1 rounded-lg font-semibold text-slate-500 hover:text-amber-700">Đang ở</button>
-                <button onclick="filterTabletStatus('cleaning')" id="tabStatusCleaning" class="tablet-status-btn px-2.5 py-1 rounded-lg font-semibold text-slate-500 hover:text-purple-700">Dọn</button>
-              </div>
-
-              <div class="tablet-search-wrapper relative flex-1 min-w-[140px] max-w-xs">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-                <input type="text" id="tabletSearchInput" oninput="handleTabletSearch(this.value)" placeholder="Tìm phòng / Tên..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
-              </div>
-            </div>
-          </div>
-
-          <!-- Room Matrix Responsive Grid (Multi-column scaled from mobile) -->
-          <div id="tabletRoomsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 pb-2">
-            <!-- Dynamically Rendered by renderTabletScreen() -->
-          </div>
-        </div>
-
-        <!-- ================= TAB 2: LỊCH SỬ LƯU TRÚ (STAY HISTORY) ================= -->
-        <div id="tabletTabGuests" class="space-y-3.5 hidden">
-          <!-- Stay History Sub-header with Advanced Filter Bar -->
-          <div class="bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-xs space-y-3">
-            <div class="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
-                  <i class="fa-solid fa-clock-rotate-left text-blue-600"></i>
-                  <span>Lịch sử Lưu trú & Giao dịch Khách hàng</span>
-                  <span class="text-xs bg-blue-100 text-blue-800 font-bold px-2.5 py-0.5 rounded-full" id="tabletGuestsCountBadge">21 lượt</span>
-                </h3>
-                <p class="text-[11px] text-slate-400 mt-0.5">Tra cứu toàn diện hồ sơ khách đã và đang lưu trú, thời gian ở thực tế, số CCCD và thanh toán</p>
-              </div>
-
-              <!-- KPI chips -->
-              <div class="flex items-center gap-2 text-xs">
-                <div class="bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-xl flex items-center gap-1.5 shadow-2xs">
-                  <span class="text-slate-400 text-[10.5px]">Tổng cộng:</span>
-                  <b id="tabHistKpiTotal" class="text-slate-800 font-black">21</b>
-                </div>
-                <div class="bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl flex items-center gap-1.5 shadow-2xs">
-                  <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                  <span class="text-amber-800 text-[10.5px]">Đang ở:</span>
-                  <b id="tabHistKpiStaying" class="text-amber-700 font-black">15</b>
-                </div>
-                <div class="bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl flex items-center gap-1.5 shadow-2xs">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                  <span class="text-emerald-800 text-[10.5px]">Đã trả phòng:</span>
-                  <b id="tabHistKpiCompleted" class="text-emerald-700 font-black">6</b>
-                </div>
-              </div>
-            </div>
-
-            <!-- Multi-Filter Toolbar -->
-            <div class="pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2.5 text-xs">
-              <!-- Status Filter segmented pills -->
-              <div class="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-xs flex-shrink-0">
-                <button onclick="filterTabletHistoryStatus('all')" id="tabHistStatusAll" class="tab-hist-status-btn px-3 py-1 rounded-lg font-bold bg-white text-slate-800 shadow-xs">Tất cả</button>
-                <button onclick="filterTabletHistoryStatus('staying')" id="tabHistStatusStaying" class="tab-hist-status-btn px-3 py-1 rounded-lg font-semibold text-slate-500 hover:text-amber-700">Đang ở</button>
-                <button onclick="filterTabletHistoryStatus('checked_out')" id="tabHistStatusOut" class="tab-hist-status-btn px-3 py-1 rounded-lg font-semibold text-slate-500 hover:text-emerald-700">Đã trả phòng</button>
-              </div>
-
-              <!-- Search Input & Room Filter & Export -->
-              <div class="flex items-center gap-2 flex-1 justify-end min-w-[280px]">
-                <div class="relative flex-1 max-w-xs">
-                  <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-                  <input type="text" id="tabletGuestsSearch" oninput="handleTabletHistorySearch(this.value)" placeholder="Tìm tên khách / CCCD / Số phòng..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
-                </div>
-
-                <select id="tabFilterHistoryRoom" onchange="handleTabletHistoryRoomFilter(this.value)" class="text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-slate-700 focus:outline-none focus:border-blue-500">
-                  <option value="">Tất cả phòng</option>
-                </select>
-
-                <button onclick="exportHistoryCsv()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs flex items-center gap-1.5 transition-colors whitespace-nowrap" title="Xuất file CSV/Excel">
-                  <i class="fa-solid fa-file-export text-slate-500"></i>
-                  <span class="hidden sm:inline">Xuất CSV</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- History Responsive Grid (2 columns in Portrait, 3 columns in Landscape) -->
-          <div id="tabletGuestsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pb-2">
-            <!-- Rendered Dynamically by renderTabletInHouseGuests() -->
-          </div>
-        </div>
-
-        <!-- ================= TAB 3: BÁO CÁO & THỐNG KÊ (STATS & REPORTS) ================= -->
-        <div id="tabletTabStats" class="space-y-4 hidden">
-          <!-- 4 KPI Metric Cards -->
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <div class="bg-white border-l-4 border-l-blue-500 p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-              <div class="text-[11px] font-semibold text-slate-400 uppercase">Tổng số phòng</div>
-              <div class="text-2xl font-black text-slate-800 mt-1" id="tabRptTotal">20</div>
-              <div class="text-[11px] text-slate-500 mt-0.5">4 tầng lưu trú</div>
-            </div>
-            <div class="bg-white border-l-4 border-l-emerald-500 p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-              <div class="text-[11px] font-semibold text-slate-400 uppercase">Phòng trống sạch</div>
-              <div class="text-2xl font-black text-emerald-600 mt-1" id="tabRptVacant">8</div>
-              <div class="text-[11px] text-emerald-600 mt-0.5">Sẵn sàng nhận khách</div>
-            </div>
-            <div class="bg-white border-l-4 border-l-amber-500 p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-              <div class="text-[11px] font-semibold text-slate-400 uppercase">Đang có khách</div>
-              <div class="text-2xl font-black text-amber-600 mt-1" id="tabRptOccupied">10</div>
-              <div class="text-[11px] text-amber-700 mt-0.5" id="tabRptGuestCount">16 khách lưu trú</div>
-            </div>
-            <div class="bg-white border-l-4 border-l-purple-500 p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-              <div class="text-[11px] font-semibold text-slate-400 uppercase">Chờ buồng phòng dọn</div>
-              <div class="text-2xl font-black text-purple-600 mt-1" id="tabRptCleaning">2</div>
-              <div class="text-[11px] text-purple-700 mt-0.5">Cần dọn vệ sinh</div>
-            </div>
-          </div>
-
-          <!-- Responsive Charts Row (Side-by-side on Tablet) -->
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 tablet-stats-charts">
-            <!-- Weekly Chart (2 cols) -->
-            <div class="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs lg:col-span-2">
-              <div class="flex items-center justify-between mb-3">
-                <div>
-                  <h4 class="text-xs font-bold text-slate-800">Lượt khách Check-in / Check-out tuần này</h4>
-                  <p class="text-[10.5px] text-slate-400">Thống kê lưu lượng khách ra vào theo ngày</p>
-                </div>
-                <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded-md">Tuần hiện tại</span>
-              </div>
-              <div class="h-48">
-                <canvas id="chartTabletWeekly"></canvas>
-              </div>
-            </div>
-
-            <!-- Doughnut Chart (1 col) -->
-            <div class="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs flex flex-col justify-between">
-              <div class="flex items-center justify-between mb-2">
-                <h4 class="text-xs font-bold text-slate-800">Tỷ lệ công suất phòng</h4>
-                <span class="text-[10px] bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded-md" id="tabOccupancyPct">50%</span>
-              </div>
-              <div class="h-36 flex items-center justify-center">
-                <canvas id="chartTabletOcc"></canvas>
-              </div>
-              <div class="grid grid-cols-3 gap-1.5 text-center text-[10px] pt-3 border-t border-slate-100 mt-2">
-                <div class="bg-emerald-50 text-emerald-800 p-1 rounded-lg font-bold" id="tabLegendVac">8 Trống</div>
-                <div class="bg-amber-50 text-amber-800 p-1 rounded-lg font-bold" id="tabLegendOcc">10 Ở</div>
-                <div class="bg-purple-50 text-purple-800 p-1 rounded-lg font-bold" id="tabLegendClean">2 Dọn</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Shift Handover Action Card -->
-          <div class="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <div class="font-bold text-xs text-slate-800">Báo cáo tổng kết ca trực lễ tân</div>
-              <div class="text-[11px] text-slate-400">Xuất phiếu đối soát số lượt khách lưu trú và bàn giao phòng cho ca sau</div>
-            </div>
-            <button onclick="handleTabletShiftReport()" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-500/20 active:scale-95 transition-all">
-              <i class="fa-solid fa-print mr-1.5"></i> In Báo Cáo Ca Trực
-            </button>
-          </div>
-        </div>
-
-        <!-- ================= TAB 4: CÀI ĐẶT & HỒ SƠ (SETTINGS & PROFILE) ================= -->
-        <div id="tabletTabSettings" class="space-y-4 pb-2 hidden">
-          
-          <!-- Responsive 2-Column Layout for Tablet Settings -->
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 tablet-settings-grid">
-            
-            <!-- Left Column: User Profile & Shift Switcher -->
-            <div class="space-y-4">
-              <!-- Profile Card -->
-              <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-                <div class="flex items-center gap-3">
-                  <div class="w-14 h-14 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-lg shadow-md shadow-blue-600/30">
-                    TL
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2">
-                      <h4 class="font-bold text-sm text-slate-800 truncate" id="tabSettingsUserName">Trần Thị Lan Anh</h4>
-                      <span class="text-[9px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Online
-                      </span>
-                    </div>
-                    <div class="text-xs text-slate-500 mt-0.5">Nhân viên Lễ tân · Ca sáng (06:00 - 18:00)</div>
-                    <div class="text-[10px] text-slate-400 mt-0.5 font-mono">Đơn vị: Nhà Nghỉ Phúc Sơn</div>
-                  </div>
-                </div>
-
-                <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
-                  <button onclick="openChangePasswordModal()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
-                    <i class="fa-solid fa-key text-[11px] text-amber-600"></i> Đổi mật khẩu
-                  </button>
-                  <button onclick="openUserProfileModal()" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
-                    <i class="fa-solid fa-user text-[11px]"></i> Hồ sơ chi tiết
-                  </button>
-                </div>
-              </div>
-
-              <!-- Quick 1-tap Employee Accounts for Shift Switch -->
-              <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-2.5">
-                <div class="text-xs font-bold text-slate-700 flex items-center justify-between">
-                  <span>⚡ Chuyển nhanh nhân viên ca trực:</span>
-                  <span class="text-[10px] text-blue-600 font-normal">1-chạm</span>
-                </div>
-                <div class="space-y-2">
-                  <button onclick="fillTabletLogin('letan.lananh', '123')" class="w-full p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 flex items-center justify-between text-left active:scale-[0.98] transition-all">
-                    <div class="flex items-center gap-2.5">
-                      <div class="w-7 h-7 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[10px]">TL</div>
-                      <div>
-                        <div class="text-xs font-bold text-slate-800">Trần Thị Lan Anh</div>
-                        <div class="text-[10px] text-slate-400">@letan.lananh</div>
-                      </div>
-                    </div>
-                    <span class="text-[10px] text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md font-semibold border border-blue-200">Lễ tân</span>
-                  </button>
-
-                  <button onclick="fillTabletLogin('letan.tuananh', '123')" class="w-full p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 flex items-center justify-between text-left active:scale-[0.98] transition-all">
-                    <div class="flex items-center gap-2.5">
-                      <div class="w-7 h-7 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[10px]">NT</div>
-                      <div>
-                        <div class="text-xs font-bold text-slate-800">Nguyễn Tuấn Anh</div>
-                        <div class="text-[10px] text-slate-400">@letan.tuananh</div>
-                      </div>
-                    </div>
-                    <span class="text-[10px] text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md font-semibold border border-blue-200">Lễ tân</span>
-                  </button>
-
-                  <button onclick="fillTabletLogin('bp.hoa', '123')" class="w-full p-2.5 rounded-xl bg-slate-50 hover:bg-purple-50 border border-slate-200 flex items-center justify-between text-left active:scale-[0.98] transition-all">
-                    <div class="flex items-center gap-2.5">
-                      <div class="w-7 h-7 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center text-[10px]">BH</div>
-                      <div>
-                        <div class="text-xs font-bold text-slate-800">Nguyễn Thị Hoa</div>
-                        <div class="text-[10px] text-slate-400">@bp.hoa</div>
-                      </div>
-                    </div>
-                    <span class="text-[10px] text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md font-semibold border border-purple-200">Buồng phòng</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right Column: Settings & Hardware -->
-            <div class="space-y-4">
-              <!-- Scanner & Notification Settings -->
-              <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-                <div class="px-4 py-3 bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-700 uppercase tracking-wide">
-                  Cài đặt Quét QR & Thông báo âm thanh
-                </div>
-                <div class="divide-y divide-slate-100 text-xs">
-                  <div class="p-3.5 flex items-center justify-between">
-                    <div>
-                      <div class="font-semibold text-slate-800">Âm thanh Beep khi quét CCCD</div>
-                      <div class="text-[10.5px] text-slate-400">Phát âm thanh báo hiệu khi nhận diện thẻ CCCD hợp lệ</div>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" checked onchange="toggleSettingSound(this)" class="sr-only peer">
-                      <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label>
-                  </div>
-
-                  <div class="p-3.5 flex items-center justify-between">
-                    <div>
-                      <div class="font-semibold text-slate-800">Tự mở Camera khi bấm Check-in</div>
-                      <div class="text-[10.5px] text-slate-400">Tự động kích hoạt camera quét QR khi mở màn hình nhận phòng</div>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" onchange="toggleSettingAutoCamera(this)" class="sr-only peer">
-                      <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label>
-                  </div>
-
-                  <div class="p-3.5 flex items-center justify-between">
-                    <div>
-                      <div class="font-semibold text-slate-800">Rung phản hồi cảm ứng (Haptic)</div>
-                      <div class="text-[10.5px] text-slate-400">Rung nhẹ khi thao tác check-in hoặc trả phòng thành công</div>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" checked onchange="toggleSettingVibrate(this)" class="sr-only peer">
-                      <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Hardware Peripheral Status -->
-              <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-                <div class="text-[11px] font-bold text-slate-700 uppercase tracking-wide">
-                  Thiết bị quầy tiếp tân & Trợ giúp
-                </div>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                  <div class="p-2.5 bg-emerald-50/70 border border-emerald-200 rounded-xl flex items-center justify-between">
-                    <div>
-                      <div class="font-bold text-emerald-900 flex items-center gap-1.5"><i class="fa-solid fa-print"></i> Máy in bill</div>
-                      <div class="text-[10px] text-emerald-700">Khổ K80 nhiệt · Sẵn sàng</div>
-                    </div>
-                    <button onclick="testPrintBillReceipt()" class="px-2 py-1 bg-white hover:bg-emerald-100 text-emerald-800 font-bold text-[10px] rounded-lg border border-emerald-300 active:scale-95">In test</button>
-                  </div>
-
-                  <div class="p-2.5 bg-blue-50/70 border border-blue-200 rounded-xl flex items-center justify-between">
-                    <div>
-                      <div class="font-bold text-blue-900 flex items-center gap-1.5"><i class="fa-solid fa-barcode"></i> Đầu đọc USB</div>
-                      <div class="text-[10px] text-blue-700">Súng quét QR · Kết nối OK</div>
-                    </div>
-                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
-                  </div>
-                </div>
-
-                <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span class="text-slate-400">Hotline hỗ trợ kỹ thuật: <b class="text-slate-700 font-mono">1900.6868</b></span>
-                  <span class="text-[11px] font-bold text-blue-700 font-mono bg-blue-50 px-2 py-0.5 rounded-md">v2.5 Pro</span>
-                </div>
-              </div>
-
-              <!-- Logout Button -->
-              <button onclick="openModal('modalConfirmLogout')" class="w-full py-3 bg-red-50 hover:bg-red-100 active:scale-[0.98] text-red-600 font-bold rounded-2xl border border-red-200/80 flex items-center justify-center gap-2 text-xs shadow-xs transition-all">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                <span>Đăng xuất tài khoản quầy Tablet</span>
-              </button>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- Tablet Bottom Navigation (5 tabs with large prominent center QR button matching Mobile) -->
-      <div class="bg-white border-t border-slate-200 px-6 py-2.5 flex items-center justify-around text-slate-400 flex-shrink-0 shadow-lg relative z-20">
-        <button onclick="tabletSwitchTab('rooms')" id="tabletNavRooms" class="flex flex-col items-center gap-1 text-blue-600 font-bold text-xs w-20 py-1 transition-colors">
-          <i class="fa-solid fa-door-open text-lg"></i>
-          <span>Phòng</span>
-        </button>
-        
-        <button onclick="tabletSwitchTab('guests')" id="tabletNavGuests" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 font-semibold text-xs w-20 py-1 transition-colors">
-          <i class="fa-solid fa-clock-rotate-left text-lg"></i>
-          <span>Lịch sử (<span id="tabletNavGuestBadge">21</span>)</span>
-        </button>
-        
-        <!-- PROMINENT CENTER QR SCANNER BUTTON (Chính giữa, nổi bật, to nhất) -->
-        <div class="flex flex-col items-center -mt-8">
-          <button onclick="openTabletCheckinScreen()" class="w-16 h-16 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center text-2xl shadow-xl shadow-blue-600/40 ring-4 ring-white active:scale-95 transition-transform" title="Quét mã QR CCCD Check-in">
-            <i class="fa-solid fa-qrcode"></i>
-          </button>
-          <span class="text-[10px] font-extrabold text-blue-700 mt-1 uppercase tracking-wider">Quét QR</span>
-        </div>
-
-        <button onclick="tabletSwitchTab('stats')" id="tabletNavStats" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 font-semibold text-xs w-20 py-1 transition-colors">
-          <i class="fa-solid fa-chart-pie text-lg"></i>
-          <span>Báo cáo</span>
-        </button>
-
-        <button onclick="tabletSwitchTab('settings')" id="tabletNavSettings" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 font-semibold text-xs w-20 py-1 transition-colors">
-          <i class="fa-solid fa-gear text-lg"></i>
-          <span>Cài đặt</span>
-        </button>
-      </div>
-
-      <!-- DEDICATED TABLET CHECK-IN SCREEN OVERLAY (RESPONSIVE SPLIT-VIEW NATIVE EXPERIENCE) -->
-      <div id="tabletScreenCheckin" class="absolute inset-0 bg-slate-100 z-30 flex flex-col hidden select-none">
-        <!-- Tablet Checkin Header -->
-        <div class="bg-blue-700 text-white pt-5 pb-3 px-6 shadow-md border-b border-blue-800 flex items-center justify-between flex-shrink-0">
-          <div class="flex items-center gap-3">
-            <button onclick="closeTabletCheckin()" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 active:scale-90 flex items-center justify-center text-white transition-all" title="Quay lại danh sách phòng">
-              <i class="fa-solid fa-arrow-left text-sm"></i>
-            </button>
-            <div>
-              <div class="font-bold text-base leading-tight">Check-in Quét QR CCCD (Tablet)</div>
-              <div class="text-[11px] text-blue-200">Nhà Nghỉ Phúc Sơn · Hệ thống số hóa hồ sơ tự động</div>
-            </div>
-          </div>
-          <button onclick="resetTabletCheckinForm()" class="text-xs font-semibold text-blue-100 hover:text-white px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 transition-all">
-            <i class="fa-solid fa-rotate-right mr-1.5"></i>Làm mới
-          </button>
-        </div>
-
-        <!-- Tablet Checkin Body (Responsive 2-Column Grid on Tablet) -->
-        <div class="flex-1 overflow-y-auto p-4" id="tabletCheckinScrollContainer">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl mx-auto tablet-checkin-grid">
-            
-            <!-- LEFT COLUMN: QR SCANNER (Camera, Sample CCCD Chips, Raw input) -->
-            <div class="bg-slate-900 text-white p-4 rounded-3xl border border-slate-800 shadow-md space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-100 flex items-center gap-1.5">
-                  <i class="fa-solid fa-qrcode text-emerald-400"></i> Quét mã QR Thẻ CCCD Gắn Chip
-                </span>
-                <button id="btnTabToggleCamera" onclick="toggleTabletCamera()" class="px-3 py-1.5 text-xs font-semibold rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1.5 active:scale-95 transition-all">
-                  <i class="fa-solid fa-video"></i> <span>Bật Camera</span>
-                </button>
-              </div>
-
-              <!-- Real Camera Box (Html5Qrcode) -->
-              <div id="tabCameraBox" class="hidden overflow-hidden rounded-2xl bg-black border border-slate-700 relative">
-                <div id="tabQrReader" class="w-full h-52 bg-black"></div>
-                <div class="p-2 text-center bg-slate-800/90 text-[11px] text-slate-300">
-                  Đang mở Camera sau. Hướng vào mã QR góc phải mặt trước/sau thẻ CCCD
-                </div>
-              </div>
-
-              <!-- Simulated Viewfinder Graphics (when camera is idle) -->
-              <div id="tabStandbyViewfinder" class="relative bg-slate-950/70 rounded-2xl p-6 border border-dashed border-slate-700 text-center overflow-hidden">
-                <div class="scanner-corner border-t-2 border-l-2 -top-1 -left-1"></div>
-                <div class="scanner-corner border-t-2 border-r-2 -top-1 -right-1"></div>
-                <div class="scanner-corner border-b-2 border-l-2 -bottom-1 -left-1"></div>
-                <div class="scanner-corner border-b-2 border-r-2 -bottom-1 -right-1"></div>
-                
-                <div class="qr-scanner-line"></div>
-
-                <div class="py-4 flex flex-col items-center justify-center">
-                  <i class="fa-solid fa-id-card-clip text-4xl text-blue-400/80 mb-2.5"></i>
-                  <span class="text-xs font-medium text-slate-200">Hướng camera hoặc máy quét vào mã QR thẻ CCCD</span>
-                  <span class="text-[10px] text-slate-400 mt-1">Hệ thống tự động điền Họ tên, Số CCCD, Ngày sinh, Giới tính, Thường trú</span>
-                </div>
-              </div>
-
-              <!-- Action: Pick Photo from Device -->
-              <label class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 text-xs font-medium rounded-xl flex items-center justify-center gap-2 cursor-pointer border border-slate-700 transition-all">
-                <i class="fa-solid fa-image text-blue-400"></i>
-                <span>Tải ảnh chụp mã QR CCCD từ thư viện</span>
-                <input type="file" id="tabQrFileInput" accept="image/*" class="hidden" onchange="handleTabImageScan(this)">
-              </label>
-
-              <!-- Simulation quick scan chips -->
-              <div class="pt-2 border-t border-slate-800/80">
-                <div class="text-[11px] text-slate-400 mb-2 font-medium flex items-center justify-between">
-                  <span>⚡ Quét mẫu CCCD thử nghiệm nhanh:</span>
-                  <span class="text-[10px] text-amber-400">1-chạm</span>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                  <button onclick="applyTabletSampleCccd(0)" class="text-xs bg-slate-800/90 hover:bg-slate-700 text-blue-300 hover:text-white p-2 rounded-xl border border-slate-700 text-left active:scale-95 transition-all">
-                    <div class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-user text-blue-400 text-[10px]"></i>Nguyễn Văn An</div>
-                    <div class="text-[10px] text-slate-400 font-mono mt-0.5">038091023456 (Nam)</div>
-                  </button>
-                  <button onclick="applyTabletSampleCccd(1)" class="text-xs bg-slate-800/90 hover:bg-slate-700 text-purple-300 hover:text-white p-2 rounded-xl border border-slate-700 text-left active:scale-95 transition-all">
-                    <div class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-user text-purple-400 text-[10px]"></i>Trần Thị Bích</div>
-                    <div class="text-[10px] text-slate-400 font-mono mt-0.5">001085067234 (Nữ)</div>
-                  </button>
-                  <button onclick="applyTabletSampleCccd(2)" class="text-xs bg-slate-800/90 hover:bg-slate-700 text-emerald-300 hover:text-white p-2 rounded-xl border border-slate-700 text-left active:scale-95 transition-all">
-                    <div class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-user text-emerald-400 text-[10px]"></i>Lê Quốc Cường</div>
-                    <div class="text-[10px] text-slate-400 font-mono mt-0.5">031094078912 (Nam)</div>
-                  </button>
-                  <button onclick="applyTabletSampleCccd(3)" class="text-xs bg-slate-800/90 hover:bg-slate-700 text-amber-300 hover:text-white p-2 rounded-xl border border-slate-700 text-left active:scale-95 transition-all">
-                    <div class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-user text-amber-400 text-[10px]"></i>Phạm Thị Dung</div>
-                    <div class="text-[10px] text-slate-400 font-mono mt-0.5">052088034567 (Nữ)</div>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Raw QR text input option -->
-              <div class="flex gap-2 pt-1">
-                <input type="text" id="tabRawQrInput" placeholder="Hoặc dán chuỗi QR CCCD / Súng barcode..." onkeydown="if(event.key==='Enter')parseTabRawInput()" class="flex-1 text-xs bg-slate-800 text-white border border-slate-700 rounded-xl px-3 py-2 placeholder:text-slate-500 focus:outline-none focus:border-blue-500 font-mono">
-                <button onclick="parseTabRawInput()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl active:scale-95 transition-all">Đọc</button>
-              </div>
-            </div>
-
-            <!-- RIGHT COLUMN: ROOM SELECTION & GUESTS LIST -->
-            <div class="space-y-3.5">
-              <!-- Card: Room Selection & Rental Type -->
-              <div class="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-sm space-y-3">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                    <i class="fa-solid fa-door-open text-blue-600"></i> Chọn phòng nhận & Giá phòng
-                  </span>
-                  <span class="text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                    Phòng trống sẵn sàng
-                  </span>
-                </div>
-                <div>
-                  <label class="block text-[11px] font-semibold text-slate-500 mb-1">Số phòng</label>
-                  <select id="tabCheckinRoomSelect" class="w-full text-xs font-bold bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500">
-                    <!-- Populated dynamically -->
-                  </select>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3 pt-1 border-t border-slate-100">
-                  <div>
-                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">Hình thức thuê</label>
-                    <select id="tabCheckinRentalType" class="w-full text-xs bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-slate-800 font-medium">
-                      <option value="daily" selected>Theo ngày / đêm</option>
-                      <option value="hourly">Theo giờ (Nghỉ ngắn)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">Giá phòng tự nhập (VNĐ)</label>
-                    <input type="number" id="tabCheckinPrice" placeholder="VD: 80000 hoặc 250000" class="w-full text-xs font-bold text-blue-600 bg-slate-50 border border-slate-300 rounded-xl p-2.5 placeholder:font-normal placeholder:text-slate-400">
-                  </div>
-                </div>
-              </div>
-
-              <!-- Card: Scanned Guests List -->
-              <div class="space-y-2">
-                <div class="flex items-center justify-between px-1">
-                  <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                    <i class="fa-solid fa-users text-blue-600"></i> Danh sách khách vào phòng (<span id="tabGuestCountBadge" class="text-blue-600 font-black">0</span>)
-                  </span>
-                  <span class="text-[10.5px] text-slate-400">Có thể quét nhiều người cùng phòng</span>
-                </div>
-
-                <div id="tabCheckinGuestsList" class="space-y-2 max-h-72 overflow-y-auto">
-                  <!-- Rendered dynamically -->
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Tablet Checkin Fixed Bottom Actions -->
-        <div class="p-4 bg-white border-t border-slate-200 shadow-xl flex items-center justify-end gap-3 flex-shrink-0 z-20">
-          <button onclick="closeTabletCheckin()" class="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl active:scale-95 transition-all">
-            Huỷ bỏ
-          </button>
-          <button onclick="submitTabletCheckinFromOverlay()" class="px-8 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 text-white text-xs font-bold rounded-xl shadow-lg shadow-blue-500/25 flex items-center gap-2 active:scale-95 transition-all">
-            <i class="fa-solid fa-check"></i> Xác nhận Nhận phòng
-          </button>
-        </div>
-      </div>
-
-      <!-- DEDICATED TABLET POS LOGIN SCREEN (When !STATE.isLoggedIn) -->
-      <div id="tabletScreenLogin" class="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-white z-40 flex flex-col items-center justify-center p-6 hidden select-none">
-        <div class="w-full max-w-md bg-slate-900/90 border border-slate-700/80 rounded-3xl p-8 shadow-2xl backdrop-blur-md relative">
-          <!-- Subtle glow -->
-          <div class="w-48 h-48 rounded-full bg-blue-600/15 blur-2xl absolute -top-10 -left-10 pointer-events-none"></div>
-          
-          <div class="text-center mb-6">
-            <div class="w-16 h-16 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-3xl mx-auto shadow-xl shadow-blue-600/40 mb-3 border border-white/20">
-              <i class="fa-solid fa-hotel"></i>
-            </div>
-            <h2 class="text-xl font-black text-white">Nhà Nghỉ Phúc Sơn</h2>
-            <p class="text-xs text-blue-300 mt-1">Hệ Thống Tablet Lễ Tân & Buồng Phòng</p>
-          </div>
-
-          <form onsubmit="handleTabletLoginSubmit(event)" class="space-y-4">
-            <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Tài khoản Lễ tân</label>
-              <div class="relative">
-                <i class="fa-solid fa-user absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-                <input type="text" id="tabletLoginUsername" value="letan.lananh" placeholder="Tên đăng nhập..." required class="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Mật khẩu</label>
-              <div class="relative">
-                <i class="fa-solid fa-lock absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-                <input type="password" id="tabletLoginPassword" value="123" placeholder="Mật khẩu..." required class="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-9 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
-                <button type="button" onclick="togglePasswordVisibility('tabletLoginPassword', this)" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-200 text-xs">
-                  <i class="fa-solid fa-eye"></i>
-                </button>
-              </div>
-            </div>
-
-            <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold rounded-xl text-xs shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition-all mt-2">
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-              <span>Vào ca làm việc</span>
-            </button>
-          </form>
-
-          <!-- 1-Tap Quick Accounts for Tablet -->
-          <div class="mt-6 pt-4 border-t border-slate-800 text-center">
-            <div class="text-[11px] text-slate-400 mb-2">⚡ Chọn nhanh nhân viên ca trực:</div>
-            <div class="grid grid-cols-3 gap-2">
-              <button type="button" onclick="fillTabletLogin('letan.lananh', '123')" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-center active:scale-95 transition-all">
-                <div class="text-xs font-bold text-white">Lan Anh</div>
-                <div class="text-[9px] text-blue-400">Lễ tân</div>
-              </button>
-              <button type="button" onclick="fillTabletLogin('letan.tuananh', '123')" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-center active:scale-95 transition-all">
-                <div class="text-xs font-bold text-white">Tuấn Anh</div>
-                <div class="text-[9px] text-blue-400">Lễ tân</div>
-              </button>
-              <button type="button" onclick="fillTabletLogin('bp.hoa', '123')" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-center active:scale-95 transition-all">
-                <div class="text-xs font-bold text-white">Chị Hoa</div>
-                <div class="text-[9px] text-purple-400">Buồng phòng</div>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-</div>
 
 <!-- ============================================================== -->
 <!-- 3. MODALS (CHỨC NĂNG CHUYÊN SÂU) -->
@@ -2309,7 +1426,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
       <div class="border border-slate-200 rounded-2xl p-4 bg-white space-y-3">
         <div class="flex items-center justify-between">
           <span class="text-xs font-bold text-slate-700 uppercase flex items-center gap-1.5">
-            <i class="fa-solid fa-camera text-blue-600"></i> Quét mã QR CCCD Gắn Chip
+            <i class="fa-solid fa-camera text-blue-600"></i> Quét mã QR trên CCCD
           </span>
           <div class="flex items-center gap-2">
             <button onclick="toggleCameraScanner()" id="btnToggleCamera" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 flex items-center gap-1">
@@ -3158,12 +2275,21 @@ function renderRoomsGrid() {
 
   container.innerHTML = floorKeys.map(function(floor) {
     var roomList = floors[floor];
+    // Choose grid class based on view mode
+    var gridClass;
+    if (STATE.viewMode === 'mobile') {
+      gridClass = 'grid grid-cols-2 gap-2';
+    } else if (STATE.viewMode === 'tablet') {
+      gridClass = 'grid grid-cols-3 gap-3';
+    } else {
+      gridClass = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4';
+    }
     return '<div class="space-y-3">'
       + '<div class="flex items-center gap-2">'
       +   '<span class="text-xs font-bold text-slate-700 uppercase tracking-wider bg-slate-200/70 text-slate-700 px-2.5 py-1 rounded-lg">Tầng ' + floor + '</span>'
       +   '<span class="text-xs text-slate-400">(' + roomList.length + ' phòng)</span>'
       + '</div>'
-      + '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">'
+      + '<div class="' + gridClass + '">'
       +   roomList.map(renderSingleRoomCard).join('')
       + '</div>'
       + '</div>';
@@ -3174,6 +2300,7 @@ function renderSingleRoomCard(room) {
   var isOcc = room.status === 'occupied';
   var isClean = room.status === 'cleaning';
   var isVac = room.status === 'vacant';
+  var isMobile = STATE.viewMode === 'mobile';
 
   var statusBadge = '';
   var actionBtn = '';
@@ -3184,44 +2311,77 @@ function renderSingleRoomCard(room) {
     var guestNames = room.guests.map(function(g) { return g.name; }).join(', ');
     var duration = calculateStayDuration(room.checkinTime);
 
-    guestContent = '<div class="mt-2 text-xs">'
-      + '<div class="font-bold text-slate-800 truncate" title="' + guestNames + '"><i class="fa-solid fa-user text-amber-600 mr-1 text-[11px]"></i>' + guestNames + '</div>'
-      + '<div class="text-[11px] text-slate-500 mt-1 flex items-center justify-between">'
-      +   '<span><i class="fa-solid fa-clock text-[10px]"></i> Vào: ' + (room.checkinTime ? room.checkinTime.split(' ')[1] : '--') + '</span>'
-      +   '<span class="font-medium text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">' + duration.humanShort + '</span>'
-      + '</div>'
-      + '</div>';
-
-    actionBtn = '<div class="mt-3 grid grid-cols-2 gap-1.5">'
-      + '<button onclick="openCheckoutModalForRoom(\'' + room.number + '\')" class="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-1.5 px-2 rounded-lg transition-colors flex items-center justify-center gap-1 shadow-sm">'
-      +   '<i class="fa-solid fa-receipt text-[11px]"></i> Trả phòng'
-      + '</button>'
-      + '<button onclick="viewRoomCccdDetails(\'' + room.number + '\')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold py-1.5 px-2 rounded-lg transition-colors flex items-center justify-center gap-1">'
-      +   '<i class="fa-solid fa-id-card text-[11px]"></i> CCCD'
-      + '</button>'
-      + '</div>';
+    if (isMobile) {
+      // Compact mobile card: just guest name + checkin time
+      guestContent = '<div class="mt-1.5 text-[11px]">'
+        + '<div class="font-bold text-slate-800 truncate leading-tight">' + guestNames + '</div>'
+        + '<div class="text-[10px] text-amber-700 mt-0.5"><i class="fa-solid fa-clock text-[9px]"></i> ' + (room.checkinTime ? room.checkinTime.split(' ')[1] : '--') + ' · ' + duration.humanShort + '</div>'
+        + '</div>';
+      actionBtn = '<div class="mt-2 grid grid-cols-2 gap-1">'
+        + '<button onclick="openCheckoutModalForRoom(\'' + room.number + '\')" class="w-full bg-amber-600 hover:bg-amber-700 text-white text-[10px] font-bold py-1.5 px-1 rounded-lg transition-colors flex items-center justify-center gap-1 active:scale-95">'
+        +   '<i class="fa-solid fa-receipt text-[10px]"></i> Trả'
+        + '</button>'
+        + '<button onclick="viewRoomCccdDetails(\'' + room.number + '\')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold py-1.5 px-1 rounded-lg transition-colors flex items-center justify-center gap-1">'
+        +   '<i class="fa-solid fa-id-card text-[10px]"></i> CCCD'
+        + '</button>'
+        + '</div>';
+    } else {
+      guestContent = '<div class="mt-2 text-xs">'
+        + '<div class="font-bold text-slate-800 truncate" title="' + guestNames + '"><i class="fa-solid fa-user text-amber-600 mr-1 text-[11px]"></i>' + guestNames + '</div>'
+        + '<div class="text-[11px] text-slate-500 mt-1 flex items-center justify-between">'
+        +   '<span><i class="fa-solid fa-clock text-[10px]"></i> Vào: ' + (room.checkinTime ? room.checkinTime.split(' ')[1] : '--') + '</span>'
+        +   '<span class="font-medium text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">' + duration.humanShort + '</span>'
+        + '</div>'
+        + '</div>';
+      actionBtn = '<div class="mt-3 grid grid-cols-2 gap-1.5">'
+        + '<button onclick="openCheckoutModalForRoom(\'' + room.number + '\')" class="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-1.5 px-2 rounded-lg transition-colors flex items-center justify-center gap-1 shadow-sm">'
+        +   '<i class="fa-solid fa-receipt text-[11px]"></i> Trả phòng'
+        + '</button>'
+        + '<button onclick="viewRoomCccdDetails(\'' + room.number + '\')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold py-1.5 px-2 rounded-lg transition-colors flex items-center justify-center gap-1">'
+        +   '<i class="fa-solid fa-id-card text-[11px]"></i> CCCD'
+        + '</button>'
+        + '</div>';
+    }
   } else if (isClean) {
     statusBadge = '<span class="badge badge-cleaning">● Chờ dọn</span>';
-    guestContent = '<div class="mt-2 text-xs text-purple-700"><p class="font-medium">Khách vừa trả phòng.</p><p class="text-[11px] text-slate-400 mt-0.5">Cần nhân viên dọn vệ sinh & thay ga.</p></div>';
-    actionBtn = '<button onclick="markRoomCleaned(\'' + room.number + '\')" class="mt-3 w-full bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-1.5 px-2 rounded-lg transition-colors flex items-center justify-center gap-1.5">'
-      + '<i class="fa-solid fa-broom text-[11px]"></i> Đã dọn xong'
-      + '</button>';
+    if (isMobile) {
+      guestContent = '<div class="mt-1.5 text-[10.5px] text-purple-700 font-medium">Cần dọn vệ sinh</div>';
+      actionBtn = '<button onclick="markRoomCleaned(\'' + room.number + '\')" class="mt-2 w-full bg-purple-600 hover:bg-purple-700 text-white text-[10px] font-bold py-1.5 px-2 rounded-lg transition-colors flex items-center justify-center gap-1 active:scale-95">'
+        + '<i class="fa-solid fa-broom text-[10px]"></i> Dọn xong'
+        + '</button>';
+    } else {
+      guestContent = '<div class="mt-2 text-xs text-purple-700"><p class="font-medium">Khách vừa trả phòng.</p><p class="text-[11px] text-slate-400 mt-0.5">Cần nhân viên dọn vệ sinh & thay ga.</p></div>';
+      actionBtn = '<button onclick="markRoomCleaned(\'' + room.number + '\')" class="mt-3 w-full bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-1.5 px-2 rounded-lg transition-colors flex items-center justify-center gap-1.5">'
+        + '<i class="fa-solid fa-broom text-[11px]"></i> Đã dọn xong'
+        + '</button>';
+    }
   } else {
     statusBadge = '<span class="badge badge-vacant">● Trống sạch</span>';
-    guestContent = '<div class="mt-2 text-xs text-emerald-700 font-medium">Sẵn sàng nhận khách ngay</div>'
-      + '<div class="text-[11px] text-slate-400 mt-1">Phòng ' + room.type + ' · Sạch sẽ</div>';
-    actionBtn = '<button onclick="openCheckinModalForRoom(\'' + room.number + '\')" class="mt-3 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-1.5 px-2 rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm">'
-      + '<i class="fa-solid fa-qrcode text-[11px]"></i> Check-in'
-      + '</button>';
+    if (isMobile) {
+      guestContent = '<div class="mt-1.5 text-[10.5px] text-emerald-700 font-medium">Sẵn sàng nhận khách</div>'
+        + '<div class="text-[10px] text-slate-400 mt-0.5">' + room.type + '</div>';
+      actionBtn = '<button onclick="openCheckinModalForRoom(\'' + room.number + '\')" class="mt-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-1.5 px-2 rounded-lg transition-colors flex items-center justify-center gap-1 active:scale-95 shadow-sm">'
+        + '<i class="fa-solid fa-qrcode text-[10px]"></i> Check-in'
+        + '</button>';
+    } else {
+      guestContent = '<div class="mt-2 text-xs text-emerald-700 font-medium">Sẵn sàng nhận khách ngay</div>'
+        + '<div class="text-[11px] text-slate-400 mt-1">Phòng ' + room.type + ' · Sạch sẽ</div>';
+      actionBtn = '<button onclick="openCheckinModalForRoom(\'' + room.number + '\')" class="mt-3 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-1.5 px-2 rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm">'
+        + '<i class="fa-solid fa-qrcode text-[11px]"></i> Check-in'
+        + '</button>';
+    }
   }
 
-  return '<div class="room-card-box status-' + room.status + ' p-4 flex flex-col justify-between">'
+  var cardPadding = isMobile ? 'p-3' : 'p-4';
+  var roomNumClass = isMobile ? 'text-base font-extrabold text-slate-800 tracking-tight' : 'text-xl font-extrabold text-slate-800 tracking-tight';
+
+  return '<div class="room-card-box status-' + room.status + ' ' + cardPadding + ' flex flex-col justify-between">'
     + '<div>'
     +   '<div class="flex items-center justify-between">'
-    +     '<span class="text-xl font-extrabold text-slate-800 tracking-tight">P.' + room.number + '</span>'
+    +     '<span class="' + roomNumClass + '">P.' + room.number + '</span>'
     +     statusBadge
     +   '</div>'
-    +   '<div class="text-[11px] font-semibold text-slate-400 mt-0.5">' + room.type + '</div>'
+    +   '<div class="text-[10px] font-semibold text-slate-400 mt-0.5">' + room.type + '</div>'
     +   guestContent
     + '</div>'
     + actionBtn
@@ -5443,8 +4603,28 @@ document.querySelectorAll('.modal-backdrop').forEach(function(backdrop) {
   });
 });
 
-// View Navigation (Admin Desktop)
+// Sidebar Off-Canvas Drawer Toggle (Tablet & Mobile Web Responsive)
+function toggleSidebarDrawer(force) {
+  var sidebar = document.getElementById('mainSidebar');
+  var backdrop = document.getElementById('sidebarBackdrop');
+  if (!sidebar) return;
+
+  var isOpen = sidebar.classList.contains('drawer-open');
+  var shouldOpen = typeof force === 'boolean' ? force : !isOpen;
+
+  if (shouldOpen) {
+    sidebar.classList.add('drawer-open');
+    if (backdrop) backdrop.classList.remove('hidden');
+  } else {
+    sidebar.classList.remove('drawer-open');
+    if (backdrop) backdrop.classList.add('hidden');
+  }
+}
+
+// View Navigation (Admin Web Responsive: Desktop / Tablet / Mobile)
 function navigatePage(sectionId, el) {
+  toggleSidebarDrawer(false);
+
   document.querySelectorAll('[id^="section-"]').forEach(function(sec) {
     sec.classList.add('hidden');
   });
@@ -5692,16 +4872,12 @@ function fillMobileLogin(username, password) {
   showToast('Đã chọn nhân viên: ' + username, 'info');
 }
 
-// Mode Switcher (Desktop Admin vs Tablet POS vs Mobile App)
+// Mode Switcher: Desktop Web vs Tablet Web (820px) vs Mobile Web (414px)
 function switchViewMode(mode) {
   STATE.viewMode = mode;
   var desktop = document.getElementById('desktopView');
-  var tablet = document.getElementById('tabletViewWrapper');
-  var mobile = document.getElementById('mobileViewWrapper');
+  var wrapper = document.getElementById('webAppWrapper');
   var dLogin = document.getElementById('desktopLoginView');
-  var mLogin = document.getElementById('mobScreenLogin');
-  var tLogin = document.getElementById('tabletScreenLogin');
-  var tContent = document.getElementById('tabletScreenContainer');
 
   var btnD = document.getElementById('btnSwitchDesktop');
   var btnT = document.getElementById('btnSwitchTablet');
@@ -5714,53 +4890,68 @@ function switchViewMode(mode) {
   if (btnT) btnT.className = inactiveClass;
   if (btnM) btnM.className = inactiveClass;
 
-  closeMobileCheckin();
-  closeTabletCheckin();
+  toggleSidebarDrawer(false);
+
+  if (desktop) {
+    desktop.classList.remove('view-desktop', 'view-tablet', 'view-mobile');
+  }
 
   if (mode === 'desktop') {
-    if (tablet) tablet.classList.add('hidden');
-    if (mobile) mobile.classList.add('hidden');
     if (btnD) btnD.className = activeClass;
-
-    if (STATE.isLoggedIn) {
-      desktop.style.display = 'flex';
-      if (dLogin) dLogin.classList.add('hidden');
-    } else {
-      desktop.style.display = 'none';
-      if (dLogin) dLogin.classList.remove('hidden');
+    if (desktop) desktop.classList.add('view-desktop');
+    if (wrapper) {
+      wrapper.className = 'w-full bg-slate-50 transition-all duration-300';
+      wrapper.style.background = '';
     }
   } else if (mode === 'tablet') {
-    desktop.style.display = 'none';
-    if (dLogin) dLogin.classList.add('hidden');
-    if (mobile) mobile.classList.add('hidden');
-    if (tablet) tablet.classList.remove('hidden');
     if (btnT) btnT.className = activeClass;
-
-    if (STATE.isLoggedIn) {
-      if (tLogin) tLogin.classList.add('hidden');
-      if (tContent) tContent.style.display = 'block';
-      renderTabletScreen();
-    } else {
-      if (tContent) tContent.style.display = 'none';
-      if (tLogin) tLogin.classList.remove('hidden');
+    if (desktop) desktop.classList.add('view-tablet');
+    if (wrapper) {
+      wrapper.className = 'w-full py-4 px-4 flex justify-center items-center min-h-[calc(100vh-56px)] transition-all duration-300';
+      wrapper.style.background = 'radial-gradient(ellipse at 50% 20%, #1e3a5f 0%, #0f172a 70%)';
     }
   } else if (mode === 'mobile') {
-    desktop.style.display = 'none';
-    if (dLogin) dLogin.classList.add('hidden');
-    if (tablet) tablet.classList.add('hidden');
-    if (mobile) mobile.classList.remove('hidden');
     if (btnM) btnM.className = activeClass;
-
-    if (STATE.isLoggedIn) {
-      if (mLogin) mLogin.classList.add('hidden');
-      renderMobileScreen();
-    } else {
-      if (mLogin) mLogin.classList.remove('hidden');
+    if (desktop) desktop.classList.add('view-mobile');
+    if (wrapper) {
+      wrapper.className = 'w-full py-4 px-4 flex justify-center items-center min-h-[calc(100vh-56px)] transition-all duration-300';
+      wrapper.style.background = 'radial-gradient(ellipse at 50% 20%, #1a1a3e 0%, #0a0a1a 70%)';
     }
   }
 
+  if (STATE.isLoggedIn) {
+    if (desktop) desktop.style.display = 'flex';
+    if (dLogin) dLogin.classList.add('hidden');
+  } else {
+    if (desktop) desktop.style.display = 'none';
+    if (dLogin) dLogin.classList.remove('hidden');
+  }
+
+  // Refresh active views
+  renderRoomsGrid();
+  renderDashboardRecent();
+  renderHistoryTable();
+  updateKpis();
   updateUserDisplays();
+
+  // Resize charts after layout shift so Canvas recalculates dimensions
+  setTimeout(function() {
+    if (typeof chartWeeklyRef !== 'undefined' && chartWeeklyRef) {
+      chartWeeklyRef.resize();
+    }
+    if (typeof chartOccupancyRef !== 'undefined' && chartOccupancyRef) {
+      chartOccupancyRef.resize();
+    }
+  }, 350);
 }
+
+// Safe compatibility stubs
+function renderMobileScreen() {}
+function renderTabletScreen() {}
+function closeMobileCheckin() {}
+function closeTabletCheckin() {}
+function renderMobileHistory() {}
+function renderTabletInHouseGuests() {}
 
 // ==================== 4.14 APP BOOTSTRAP ====================
 document.addEventListener('DOMContentLoaded', function() {
