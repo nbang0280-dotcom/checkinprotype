@@ -473,28 +473,77 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
   font-size: 1rem !important;
 }
 
-/* Room filter bar: horizontal scroll on mobile */
-#desktopView.view-mobile #section-rooms > div:first-child {
-  flex-wrap: nowrap !important;
-  overflow-x: auto;
-  gap: 6px !important;
-  padding: 10px !important;
-}
-
-#desktopView.view-mobile #section-rooms > div:first-child > div:first-child {
-  flex-wrap: nowrap !important;
-  overflow-x: auto;
-}
-
-#desktopView.view-mobile #section-rooms > div:first-child > div:last-child {
+/* Room filter bar: mobile 2-tier clean layout (Row 1: Search + Add; Row 2: Status Chips) */
+#desktopView.view-mobile #roomsFilterBar {
+  display: flex !important;
   flex-direction: column !important;
-  gap: 6px !important;
   align-items: stretch !important;
-  flex-shrink: 0;
+  gap: 8px !important;
+  padding: 10px !important;
+  border-radius: 14px !important;
+}
+
+/* Row 1: Search input (flex 1) + Add Button */
+#desktopView.view-mobile #roomsFilterBar > div:last-child {
+  order: 1 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+#desktopView.view-mobile #roomsFilterBar > div:last-child > .relative {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  width: auto !important;
 }
 
 #desktopView.view-mobile #inputSearchRoom {
   width: 100% !important;
+  font-size: 11.5px !important;
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+  padding-left: 28px !important;
+  height: 34px !important;
+  border-radius: 10px !important;
+}
+
+#desktopView.view-mobile #roomsFilterBar > div:last-child > button {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  padding: 0 10px !important;
+  height: 34px !important;
+  font-size: 11px !important;
+  border-radius: 10px !important;
+}
+
+/* Row 2: Filter status chips with smooth touch scroll */
+#desktopView.view-mobile #roomsFilterBar > div:first-child {
+  order: 2 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+  gap: 6px !important;
+  width: 100% !important;
+  padding: 1px 0 2px 0 !important;
+}
+
+#desktopView.view-mobile #roomsFilterBar > div:first-child::-webkit-scrollbar {
+  display: none !important;
+}
+
+#desktopView.view-mobile #roomsFilterBar .room-filter-btn {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  font-size: 11px !important;
+  padding: 5px 9px !important;
+  border-radius: 9px !important;
+  line-height: 1.2 !important;
+  min-height: 28px !important;
 }
 
 /* History filter: stack on mobile */
@@ -592,24 +641,33 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
   width: 260px;
 }
 
-/* Room filter bar on tablet: wrap nicely */
-#desktopView.view-tablet #section-rooms > div:first-child {
-  flex-direction: column !important;
-  align-items: stretch !important;
+/* Room filter bar on tablet */
+#desktopView.view-tablet #roomsFilterBar {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  padding: 12px 14px !important;
+}
+
+#desktopView.view-tablet #roomsFilterBar > div:first-child {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+#desktopView.view-tablet #roomsFilterBar > div:last-child {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
   gap: 8px !important;
 }
 
-#desktopView.view-tablet #section-rooms > div:first-child > div:first-child {
-  flex-wrap: wrap !important;
-}
-
-#desktopView.view-tablet #section-rooms > div:first-child > div:last-child {
-  flex-direction: row !important;
-  align-items: center !important;
-}
-
 #desktopView.view-tablet #inputSearchRoom {
-  width: 200px !important;
+  width: 180px !important;
 }
 
 /* Compact subheader text on tablet */
@@ -1157,7 +1215,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color:
       <!-- ================= PAGE 2: ROOM MANAGEMENT (SƠ ĐỒ PHÒNG) ================= -->
       <section id="section-rooms" class="hidden space-y-4">
         <!-- Floor & Status Filter Bar -->
-        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-wrap items-center justify-between gap-4">
+        <div id="roomsFilterBar" class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-wrap items-center justify-between gap-4">
           <div class="flex flex-wrap items-center gap-2">
             <button onclick="filterRooms('all')" class="room-filter-btn active px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white transition-all" data-status="all">
               Tất cả (20)
@@ -4621,9 +4679,30 @@ function toggleSidebarDrawer(force) {
   }
 }
 
+function updatePageHeading() {
+  var activePage = STATE.activePage || 'dashboard';
+  var isMobile = STATE.viewMode === 'mobile';
+  var headings = {
+    dashboard: ['Tổng quan hoạt động hôm nay', 'Thống kê tỷ lệ lấp đầy, khách ra vào và tình trạng phòng', 'Tổng quan'],
+    rooms: ['Sơ đồ Phòng & Tình trạng Lưu trú', 'Quản lý trạng thái Trống sạch, Đang ở và Chờ dọn buồng phòng', 'Sơ đồ phòng'],
+    history: ['Lịch sử Lưu trú & Giao dịch', 'Toàn bộ danh sách Check-in / Check-out và thời gian thực', 'Lịch sử lưu trú'],
+    customers: ['Danh bạ Khách hàng Số hóa', 'Hồ sơ khách trích xuất tự động từ mã QR Căn cước công dân', 'Danh bạ khách'],
+    users: ['Quản trị Nhân viên & Phân quyền', 'Kiểm soát quyền truy cập của Lễ tân, Buồng phòng và Quản lý', 'Nhân viên'],
+    logs: ['Nhật ký Hệ thống (Audit Log)', 'Lưu vết lịch sử thao tác phục vụ đối soát an toàn thông tin', 'Nhật ký audit']
+  };
+  if (headings[activePage]) {
+    var title = isMobile && headings[activePage][2] ? headings[activePage][2] : headings[activePage][0];
+    var hEl = document.getElementById('pageHeading');
+    var subEl = document.getElementById('pageSubheading');
+    if (hEl) hEl.textContent = title;
+    if (subEl) subEl.textContent = headings[activePage][1];
+  }
+}
+
 // View Navigation (Admin Web Responsive: Desktop / Tablet / Mobile)
 function navigatePage(sectionId, el) {
   toggleSidebarDrawer(false);
+  STATE.activePage = sectionId;
 
   document.querySelectorAll('[id^="section-"]').forEach(function(sec) {
     sec.classList.add('hidden');
@@ -4637,19 +4716,7 @@ function navigatePage(sectionId, el) {
   });
   if (el) el.classList.add('active');
 
-  var headings = {
-    dashboard: ['Tổng quan hoạt động hôm nay', 'Thống kê tỷ lệ lấp đầy, khách ra vào và tình trạng phòng'],
-    rooms: ['Sơ đồ Phòng & Tình trạng Lưu trú', 'Quản lý trạng thái Trống sạch, Đang ở và Chờ dọn buồng phòng'],
-    history: ['Lịch sử Lưu trú & Giao dịch', 'Toàn bộ danh sách Check-in / Check-out và thời gian thực'],
-    customers: ['Danh bạ Khách hàng Số hóa', 'Hồ sơ khách trích xuất tự động từ mã QR Căn cước công dân'],
-    users: ['Quản trị Nhân viên & Phân quyền', 'Kiểm soát quyền truy cập của Lễ tân, Buồng phòng và Quản lý'],
-    logs: ['Nhật ký Hệ thống (Audit Log)', 'Lưu vết lịch sử thao tác phục vụ đối soát an toàn thông tin']
-  };
-
-  if (headings[sectionId]) {
-    document.getElementById('pageHeading').textContent = headings[sectionId][0];
-    document.getElementById('pageSubheading').textContent = headings[sectionId][1];
-  }
+  updatePageHeading();
 
   if (sectionId === 'rooms') renderRoomsGrid();
   if (sectionId === 'history') renderHistoryTable();
@@ -4933,6 +5000,7 @@ function switchViewMode(mode) {
   renderHistoryTable();
   updateKpis();
   updateUserDisplays();
+  updatePageHeading();
 
   // Resize charts after layout shift so Canvas recalculates dimensions
   setTimeout(function() {
