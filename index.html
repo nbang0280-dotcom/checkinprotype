@@ -691,12 +691,15 @@ table tbody tr:hover {
   display: none !important;
 }
 
-/* User menu: hide text on mobile */
-#desktopView.view-mobile #desktopUserMenuContainer .text-left {
+/* User menu: hide text on button in top bar on mobile, keep dropdown buttons visible */
+#desktopView.view-mobile #desktopUserMenuContainer > button > .text-left {
   display: none !important;
 }
-#desktopView.view-mobile #desktopUserMenuContainer .fa-chevron-down {
+#desktopView.view-mobile #desktopUserMenuContainer > button > .fa-chevron-down {
   display: none !important;
+}
+#desktopUserDropdown button {
+  display: flex !important;
 }
 
 /* Action buttons: hide text on mobile, show icon only */
@@ -754,11 +757,11 @@ table tbody tr:hover {
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 }
 
-/* User menu on tablet: hide long text */
-#desktopView.view-tablet #desktopUserMenuContainer .text-left {
+/* User menu on tablet: hide long text on trigger button */
+#desktopView.view-tablet #desktopUserMenuContainer > button > .text-left {
   display: none !important;
 }
-#desktopView.view-tablet #desktopUserMenuContainer .fa-chevron-down {
+#desktopView.view-tablet #desktopUserMenuContainer > button > .fa-chevron-down {
   display: none !important;
 }
 
